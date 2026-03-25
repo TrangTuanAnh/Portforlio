@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { entrySlug } from '../utils/content';
+import { SITE_CONFIG } from '../siteConfig';
 
 type CtfEntry = CollectionEntry<'ctf'>;
 
@@ -12,6 +13,9 @@ const { item } = Astro.props;
 const slug = entrySlug(item);
 const href = item.data.externalUrl ?? `/ctf/${slug}`;
 const isExternal = Boolean(item.data.externalUrl);
+const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const cardClass = enable3d ? 'card reveal glass-panel tilt-3d depth-hover' : 'card reveal glass-panel';
+const cardTiltMax = SITE_CONFIG.ui.cardTiltMax;
 const formattedDate = new Intl.DateTimeFormat('vi-VN', {
   day: '2-digit',
   month: '2-digit',
@@ -19,7 +23,7 @@ const formattedDate = new Intl.DateTimeFormat('vi-VN', {
 }).format(item.data.date);
 ---
 
-<article class="card reveal glass-panel tilt-3d depth-hover" data-tilt-max="4.6">
+<article class={cardClass} data-tilt-max={enable3d ? cardTiltMax : undefined}>
   <div class="meta-list">
     <span class="meta">{formattedDate}</span>
     <span class="badge">{item.data.category}</span>

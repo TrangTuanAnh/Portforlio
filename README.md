@@ -39,13 +39,16 @@ Bạn chỉ cần làm việc ở **một thư mục chung**:
 
 - `public/personal/profile.json`: chỉnh thông tin cá nhân
 - `public/personal/uploads/`: upload file public (CV, avatar, cert...)
+- `public/personal/site-config.json`: chỉnh link CTA + bật/tắt 3D + độ nghiêng hiệu ứng
+- `public/personal/HUONG_DAN_LINK_UI.md`: tài liệu nhanh để biết gắn link ở đâu
 
 Ví dụ:
 
 - `public/personal/uploads/resume.pdf` -> truy cập `/personal/uploads/resume.pdf`
 - Trong `profile.json`, trường `resumeFile` đặt là `/personal/uploads/resume.pdf`
 
-Các trang `Hero`, `About`, `Contact`, `Footer` đang đọc dữ liệu từ `public/personal/profile.json`.
+Các trang `Hero`, `About`, `Contact`, `Footer` đọc dữ liệu từ `public/personal/profile.json`.
+Hiệu ứng 3D và link CTA đọc từ `public/personal/site-config.json`.
 
 ## 5) Cấu trúc nội dung bài viết
 

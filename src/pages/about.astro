@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { PROFILE } from '../profile';
+import { SITE_CONFIG } from '../siteConfig';
+
+const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const infoClass = enable3d ? 'info-card reveal glass-panel tilt-3d depth-hover' : 'info-card reveal glass-panel';
+const infoTiltMax = SITE_CONFIG.ui.infoTiltMax;
 ---
 
 <BaseLayout title="About | Portfolio An Ninh Mạng" description="Thông tin cá nhân, định hướng và năng lực chính.">
@@ -10,7 +15,7 @@ import { PROFILE } from '../profile';
   </section>
 
   <section class="section info-grid">
-    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+    <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>Thông tin nhanh</h3>
       <p>Tên hiển thị: {PROFILE.name}</p>
       <p>Khu vực: {PROFILE.location}</p>
@@ -22,21 +27,21 @@ import { PROFILE } from '../profile';
       )}
     </article>
 
-    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+    <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>Focus area</h3>
       <ul>
         {PROFILE.focusAreas.map((item) => <li>{item}</li>)}
       </ul>
     </article>
 
-    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+    <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>Tech stack thường dùng</h3>
       <ul>
         {PROFILE.techStack.map((item) => <li>{item}</li>)}
       </ul>
     </article>
 
-    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+    <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>Mục tiêu 2026</h3>
       <ul>
         {PROFILE.goals.map((item) => <li>{item}</li>)}

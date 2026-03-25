@@ -1,0 +1,15 @@
+{
+  "links": {
+    "heroPrimary": "/ctf",
+    "heroSecondary": "/project",
+    "heroContact": "mailto:24520131@gm.uit.edu.vn",
+    "writeupRepoRoot": "https://github.com/TrangTuanAnh"
+  },
+  "ui": {
+    "theme": "light-glass-pastel",
+    "enable3dEffects": true,
+    "heroTiltMax": 5.5,
+    "cardTiltMax": 4.6,
+    "infoTiltMax": 3.8
+  }
+}

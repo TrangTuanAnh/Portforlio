@@ -1,8 +1,13 @@
 ---
 import { PROFILE } from '../profile';
+import { SITE_CONFIG } from '../siteConfig';
+
+const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const heroClass = enable3d ? 'hero reveal glass-panel tilt-3d depth-hover' : 'hero reveal glass-panel';
+const heroTiltMax = SITE_CONFIG.ui.heroTiltMax;
 ---
 
-<section class="hero reveal glass-panel tilt-3d depth-hover" data-tilt-max="5.5">
+<section class={heroClass} data-tilt-max={enable3d ? heroTiltMax : undefined}>
   <span class="hero-chip">CTF Writeup · Security Projects · Learning Log</span>
   <h1>{PROFILE.name}</h1>
   <p>
@@ -10,8 +15,8 @@ import { PROFILE } from '../profile';
     challenge CTF đến xây công cụ nhỏ phục vụ phòng thủ và nghiên cứu.
   </p>
   <div class="hero-cta">
-    <a class="btn" href="/ctf">Xem CTF Writeup</a>
-    <a class="btn" href="/project">Khám phá Project</a>
-    <a class="btn" href={`mailto:${PROFILE.email}`}>Liên hệ nhanh</a>
+    <a class="btn" href={SITE_CONFIG.links.heroPrimary}>Xem CTF Writeup</a>
+    <a class="btn" href={SITE_CONFIG.links.heroSecondary}>Khám phá Project</a>
+    <a class="btn" href={SITE_CONFIG.links.heroContact || `mailto:${PROFILE.email}`}>Liên hệ nhanh</a>
   </div>
 </section>

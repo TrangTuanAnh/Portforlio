@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PROFILE } from '../profile';
+---
+
+<BaseLayout title="Contact | Portfolio An Ninh Mạng" description="Các kênh liên hệ: Email, GitHub, LinkedIn.">
+  <section class="reveal">
+    <h1 class="page-title">Contact</h1>
+    <p class="page-description page-intro">
+      V1 giữ đơn giản, không dùng backend form. Bạn có thể liên hệ trực tiếp qua email hoặc social profile bên dưới.
+    </p>
+  </section>
+
+  <section class="section info-grid">
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>Email</h3>
+      <p>Phù hợp cho trao đổi công việc hoặc hợp tác kỹ thuật.</p>
+      <a class="btn" href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+    </article>
+
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>GitHub</h3>
+      <p>Xem source code project, lịch sử commit và thử nghiệm tooling.</p>
+      <a class="btn" href={PROFILE.github} target="_blank" rel="noreferrer">Mở GitHub</a>
+    </article>
+
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>LinkedIn</h3>
+      <p>Kênh phù hợp cho networking chuyên nghiệp và cập nhật định hướng nghề nghiệp.</p>
+      <a class="btn" href={PROFILE.linkedin} target="_blank" rel="noreferrer">Mở LinkedIn</a>
+    </article>
+
+    {PROFILE.resumeFile && (
+      <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+        <h3>CV / Resume</h3>
+        <p>File được lấy từ thư mục upload chung: <code>/public/personal/uploads</code>.</p>
+        <a class="btn" href={PROFILE.resumeFile} target="_blank" rel="noreferrer">
+          Mở CV
+        </a>
+      </article>
+    )}
+  </section>
+</BaseLayout>
+

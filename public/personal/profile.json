@@ -1,0 +1,26 @@
+{
+  "name": "Trang Tuấn Anh",
+  "headline": "Cybersecurity Learner | CTF Player",
+  "email": "24520131@gm.uit.edu.vn",
+  "github": "https://github.com/TrangTuanAnh",
+  "linkedin": "https://www.linkedin.com/in/anh-trang-tu%E1%BA%A5n-40260a394/",
+  "location": "Ho Chi Minh City, Vietnam",
+  "orientation": "Security Research + Practical Tooling",
+  "aboutIntro": "Mình tập trung vào web security, DevSecOps, ML/Dl trong Cyber Security",
+  "focusAreas": [
+    "CTF writeup theo hướng tái hiện được",
+    "Phân tích hành vi hệ thống và log",
+    "Xây dựng công cụ hỗ trợ bảo mật và tự động hóa"
+  ],
+  "techStack": [
+    "Security Operations & Tools: Burp Suite, Nmap, Wireshark (Phân tích log/traffic), Metasploit, Gobuster, SQLmap",
+    "Network & Infrastructure: TCP/IP, IDS/IPS (NFStream), Linux Administration (Ubuntu/Debian), Docker (Containerization",
+    "Programming & Frameworks: Python (Backend & Scripting), FastAPI, MySQL, C++ (Network Programming), Basic Machine Learning (ứng dụng trong phát hiện mã độc/bất thường)",
+    "Platforms & Labs: TryHackMe (Jr Penetration Tester Path), PortSwigger Academy (Web Security), Hack The Box (Starting Point)",
+    "Version Control & Tools: Git/GitHub, Markdown (Documentation)"
+  ],
+  "goals": [
+    "Hoàn thiện portfolio cùng writeup chất lượng cao",
+    "Ra mắt thêm các project cyber security phục vục cộng đồng"  
+  ]
+}

@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CardBlog from '../../components/CardBlog.astro';
+import { publishedOnly, sortByDateDesc } from '../../utils/content';
+
+const blogItems = sortByDateDesc(await getCollection('blog', publishedOnly));
+---
+
+<BaseLayout title="Blog | Portfolio An Ninh Mạng" description="Bài viết ngoài CTF: learning log, note và workflow kỹ thuật.">
+  <section class="reveal">
+    <h1 class="page-title">Blog</h1>
+    <p class="page-description page-intro">
+      Không chỉ challenge CTF, đây là nơi mình ghi lại các quy trình học và tối ưu workflow thực hành bảo mật.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="grid cols-2">
+      {blogItems.map((item) => <CardBlog item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

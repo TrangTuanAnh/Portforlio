@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CardCTF from '../components/CardCTF.astro';
+import CardProject from '../components/CardProject.astro';
+import CardBlog from '../components/CardBlog.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { featuredOnly, sortByDateDesc } from '../utils/content';
+
+const featuredCtf = sortByDateDesc(await getCollection('ctf', featuredOnly)).slice(0, 3);
+const featuredProjects = sortByDateDesc(await getCollection('projects', featuredOnly)).slice(0, 3);
+const featuredBlogs = sortByDateDesc(await getCollection('blog', featuredOnly)).slice(0, 3);
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  <Hero />
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Featured CTF Writeup</h2>
+        <p class="section-subtext">Các bài phân tích nổi bật, tập trung vào tư duy giải và lessons learned.</p>
+      </div>
+      <a class="link-arrow" href="/ctf">Xem tất cả CTF →</a>
+    </div>
+    <div class="grid cols-3">
+      {featuredCtf.map((item) => <CardCTF item={item} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-subtext">Các công cụ/lab ưu tiên tính thực chiến và khả năng tái sử dụng.</p>
+      </div>
+      <a class="link-arrow" href="/project">Xem tất cả Project →</a>
+    </div>
+    <div class="grid cols-2">
+      {featuredProjects.map((item) => <CardProject item={item} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Featured Blog</h2>
+        <p class="section-subtext">Ghi chú học tập, workflow và kinh nghiệm thực hành bảo mật.</p>
+      </div>
+      <a class="link-arrow" href="/blog">Xem tất cả Blog →</a>
+    </div>
+    <div class="grid cols-2">
+      {featuredBlogs.map((item) => <CardBlog item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

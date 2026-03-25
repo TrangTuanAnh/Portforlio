@@ -1,0 +1,29 @@
+---
+const pathname = Astro.url.pathname;
+const navItems = [
+  { href: '/', label: 'Home' },
+  { href: '/ctf', label: 'CTF' },
+  { href: '/project', label: 'Project' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const isCurrent = (href: string) => {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(`${href}/`);
+};
+---
+
+<div class="nav-wrap glass-panel">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="nav-brand" href="/">NS//Portfolio</a>
+    <div class="nav-links">
+      {navItems.map(({ href, label }) => (
+        <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>
+          {label}
+        </a>
+      ))}
+    </div>
+  </nav>
+</div>

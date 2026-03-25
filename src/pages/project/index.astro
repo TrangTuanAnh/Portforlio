@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CardProject from '../../components/CardProject.astro';
+import { publishedOnly, sortByDateDesc } from '../../utils/content';
+
+const projectItems = sortByDateDesc(await getCollection('projects', publishedOnly));
+---
+
+<BaseLayout title="Project | Portfolio An Ninh Mạng" description="Các dự án tool/lab security với mô tả mục tiêu, stack và giới hạn.">
+  <section class="reveal">
+    <h1 class="page-title">Projects</h1>
+    <p class="page-description page-intro">
+      Danh sách project ưu tiên tính thực tế: giải quyết vấn đề cụ thể, có hướng dẫn tái hiện và kết quả đo được.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="grid cols-2">
+      {projectItems.map((item) => <CardProject item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

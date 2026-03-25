@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CardCTF from '../../components/CardCTF.astro';
+import { publishedOnly, sortByDateDesc } from '../../utils/content';
+
+const ctfItems = sortByDateDesc(await getCollection('ctf', publishedOnly));
+---
+
+<BaseLayout title="CTF | Portfolio An Ninh Mạng" description="Tổng hợp writeup CTF theo hướng thực chiến, có metadata rõ ràng.">
+  <section class="reveal">
+    <h1 class="page-title">CTF Writeup</h1>
+    <p class="page-description page-intro">
+      Danh sách writeup được sắp theo thời gian mới nhất. Bài nào có link ngoài sẽ mở thẳng repo chứa full writeup.
+    </p>
+  </section>
+
+  <section class="section">
+    <div class="grid cols-3">
+      {ctfItems.map((item) => <CardCTF item={item} />)}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+import { PROFILE } from '../profile';
+---
+
+<section class="hero reveal glass-panel tilt-3d depth-hover" data-tilt-max="5.5">
+  <span class="hero-chip">CTF Writeup · Security Projects · Learning Log</span>
+  <h1>{PROFILE.name}</h1>
+  <p>
+    {PROFILE.headline}. Mình chia sẻ quá trình học an ninh mạng một cách thực tế: từ cách phân tích
+    challenge CTF đến xây công cụ nhỏ phục vụ phòng thủ và nghiên cứu.
+  </p>
+  <div class="hero-cta">
+    <a class="btn" href="/ctf">Xem CTF Writeup</a>
+    <a class="btn" href="/project">Khám phá Project</a>
+    <a class="btn" href={`mailto:${PROFILE.email}`}>Liên hệ nhanh</a>
+  </div>
+</section>

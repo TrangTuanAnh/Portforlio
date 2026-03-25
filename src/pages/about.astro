@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { PROFILE } from '../profile';
+---
+
+<BaseLayout title="About | Portfolio An Ninh Mạng" description="Thông tin cá nhân, định hướng và năng lực chính.">
+  <section class="reveal">
+    <h1 class="page-title">About</h1>
+    <p class="page-description page-intro">{PROFILE.aboutIntro}</p>
+  </section>
+
+  <section class="section info-grid">
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>Thông tin nhanh</h3>
+      <p>Tên hiển thị: {PROFILE.name}</p>
+      <p>Khu vực: {PROFILE.location}</p>
+      <p>Định hướng: {PROFILE.orientation}</p>
+      {PROFILE.resumeFile && (
+        <a class="btn" href={PROFILE.resumeFile} target="_blank" rel="noreferrer" style="margin-top: 0.5rem;">
+          Xem CV
+        </a>
+      )}
+    </article>
+
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>Focus area</h3>
+      <ul>
+        {PROFILE.focusAreas.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>Tech stack thường dùng</h3>
+      <ul>
+        {PROFILE.techStack.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+
+    <article class="info-card reveal glass-panel tilt-3d depth-hover" data-tilt-max="3.8">
+      <h3>Mục tiêu 2026</h3>
+      <ul>
+        {PROFILE.goals.map((item) => <li>{item}</li>)}
+      </ul>
+    </article>
+  </section>
+</BaseLayout>

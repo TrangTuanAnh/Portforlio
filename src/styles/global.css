@@ -237,6 +237,13 @@ main {
   margin-top: 2.3rem;
 }
 
+.empty-state {
+  margin: 0;
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  color: var(--text-muted);
+}
+
 .btn,
 .link-arrow {
   display: inline-flex;

@@ -3,8 +3,11 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CardBlog from '../../components/CardBlog.astro';
 import { publishedOnly, sortByDateDesc } from '../../utils/content';
+import { hasMarkdownContent } from '../../utils/contentPresence';
 
-const blogItems = sortByDateDesc(await getCollection('blog', publishedOnly));
+const blogItems = hasMarkdownContent('src/content/blog')
+  ? sortByDateDesc(await getCollection('blog', publishedOnly))
+  : [];
 ---
 
 <BaseLayout title="Blog | Portfolio An Ninh Mạng" description="Bài viết ngoài CTF: learning log, note và workflow kỹ thuật.">
@@ -16,8 +19,12 @@ const blogItems = sortByDateDesc(await getCollection('blog', publishedOnly));
   </section>
 
   <section class="section">
-    <div class="grid cols-2">
-      {blogItems.map((item) => <CardBlog item={item} />)}
-    </div>
+    {blogItems.length > 0 ? (
+      <div class="grid cols-2">
+        {blogItems.map((item) => <CardBlog item={item} />)}
+      </div>
+    ) : (
+      <p class="empty-state glass-panel">Bạn chưa có bài blog public nào ở thời điểm này.</p>
+    )}
   </section>
 </BaseLayout>

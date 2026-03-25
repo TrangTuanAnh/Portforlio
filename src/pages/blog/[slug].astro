@@ -4,8 +4,10 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostLayout from '../../layouts/PostLayout.astro';
 import { entrySlug, publishedOnly, sortByDateDesc } from '../../utils/content';
+import { hasMarkdownContent } from '../../utils/contentPresence';
 
 export async function getStaticPaths() {
+  if (!hasMarkdownContent('src/content/blog')) return [];
   const posts = sortByDateDesc(await getCollection('blog', publishedOnly));
   return posts.map((post) => ({ params: { slug: entrySlug(post) }, props: { post } }));
 }

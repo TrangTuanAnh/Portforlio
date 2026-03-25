@@ -16,8 +16,12 @@ const ctfItems = sortByDateDesc(await getCollection('ctf', publishedOnly));
   </section>
 
   <section class="section">
-    <div class="grid cols-3">
-      {ctfItems.map((item) => <CardCTF item={item} />)}
-    </div>
+    {ctfItems.length > 0 ? (
+      <div class="grid cols-3">
+        {ctfItems.map((item) => <CardCTF item={item} />)}
+      </div>
+    ) : (
+      <p class="empty-state glass-panel">Bạn chưa có writeup nào. Hãy thêm file trong `src/content/ctf`.</p>
+    )}
   </section>
 </BaseLayout>

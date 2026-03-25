@@ -7,10 +7,13 @@ import CardProject from '../components/CardProject.astro';
 import CardBlog from '../components/CardBlog.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { featuredOnly, sortByDateDesc } from '../utils/content';
+import { hasMarkdownContent } from '../utils/contentPresence';
 
 const featuredCtf = sortByDateDesc(await getCollection('ctf', featuredOnly)).slice(0, 3);
-const featuredProjects = sortByDateDesc(await getCollection('projects', featuredOnly)).slice(0, 3);
-const featuredBlogs = sortByDateDesc(await getCollection('blog', featuredOnly)).slice(0, 3);
+const featuredProjects = hasMarkdownContent('src/content/projects')
+  ? sortByDateDesc(await getCollection('projects', featuredOnly)).slice(0, 3)
+  : [];
+const featuredBlogs = hasMarkdownContent('src/content/blog') ? sortByDateDesc(await getCollection('blog', featuredOnly)).slice(0, 3) : [];
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -24,9 +27,13 @@ const featuredBlogs = sortByDateDesc(await getCollection('blog', featuredOnly)).
       </div>
       <a class="link-arrow" href="/ctf">Xem tất cả CTF →</a>
     </div>
-    <div class="grid cols-3">
-      {featuredCtf.map((item) => <CardCTF item={item} />)}
-    </div>
+    {featuredCtf.length > 0 ? (
+      <div class="grid cols-3">
+        {featuredCtf.map((item) => <CardCTF item={item} />)}
+      </div>
+    ) : (
+      <p class="empty-state glass-panel">Chưa có writeup nổi bật. Thêm bài trong `src/content/ctf` để hiển thị.</p>
+    )}
   </section>
 
   <section class="section">
@@ -37,9 +44,13 @@ const featuredBlogs = sortByDateDesc(await getCollection('blog', featuredOnly)).
       </div>
       <a class="link-arrow" href="/project">Xem tất cả Project →</a>
     </div>
-    <div class="grid cols-2">
-      {featuredProjects.map((item) => <CardProject item={item} />)}
-    </div>
+    {featuredProjects.length > 0 ? (
+      <div class="grid cols-2">
+        {featuredProjects.map((item) => <CardProject item={item} />)}
+      </div>
+    ) : (
+      <p class="empty-state glass-panel">Hiện chưa có project public.</p>
+    )}
   </section>
 
   <section class="section">
@@ -50,8 +61,12 @@ const featuredBlogs = sortByDateDesc(await getCollection('blog', featuredOnly)).
       </div>
       <a class="link-arrow" href="/blog">Xem tất cả Blog →</a>
     </div>
-    <div class="grid cols-2">
-      {featuredBlogs.map((item) => <CardBlog item={item} />)}
-    </div>
+    {featuredBlogs.length > 0 ? (
+      <div class="grid cols-2">
+        {featuredBlogs.map((item) => <CardBlog item={item} />)}
+      </div>
+    ) : (
+      <p class="empty-state glass-panel">Hiện chưa có bài blog public.</p>
+    )}
   </section>
 </BaseLayout>

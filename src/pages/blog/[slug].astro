@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { entrySlug, publishedOnly, sortByDateDesc } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const posts = sortByDateDesc(await getCollection('blog', publishedOnly));
+  return posts.map((post) => ({ params: { slug: entrySlug(post) }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const labels = post.data.tags.map((tag) => `#${tag}`);
+---
+
+<BaseLayout title={`${post.data.title} | Blog`} description={post.data.summary}>
+  <PostLayout title={post.data.title} description={post.data.summary} date={post.data.date} labels={labels}>
+    <Content />
+  </PostLayout>
+</BaseLayout>

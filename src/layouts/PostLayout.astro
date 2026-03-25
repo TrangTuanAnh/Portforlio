@@ -1,0 +1,29 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  labels?: string[];
+}
+
+const { title, description, date, labels = [] } = Astro.props;
+const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+}).format(date);
+---
+
+<article class="post reveal">
+  <header class="post-header">
+    <h1>{title}</h1>
+    <p>{description}</p>
+    <div class="meta-list" style="margin-top: 0.8rem;">
+      <span class="meta">Ngày: {formattedDate}</span>
+      {labels.map((label) => <span class="meta">{label}</span>)}
+    </div>
+  </header>
+  <div class="post-content">
+    <slot />
+  </div>
+</article>

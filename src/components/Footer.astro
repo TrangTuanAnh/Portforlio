@@ -1,0 +1,16 @@
+---
+import { PROFILE } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <small>
+    © {year} {PROFILE.name}. Portfolio static-first với Astro + Cloudflare Pages.
+  </small>
+  <div class="footer-links">
+    <a href={PROFILE.github} target="_blank" rel="noreferrer">GitHub</a>
+    <a href={PROFILE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+    <a href={`mailto:${PROFILE.email}`}>Email</a>
+  </div>
+</footer>

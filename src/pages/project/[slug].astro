@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { entrySlug, publishedOnly, sortByDateDesc } from '../../utils/content';
+
+export async function getStaticPaths() {
+  const posts = sortByDateDesc(await getCollection('projects', publishedOnly));
+  return posts.map((post) => ({ params: { slug: entrySlug(post) }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<'projects'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const labels = [...post.data.stack, ...(post.data.repo ? ['Repo available'] : []), ...(post.data.demo ? ['Demo available'] : [])];
+---
+
+<BaseLayout title={`${post.data.title} | Project`} description={post.data.summary}>
+  <PostLayout title={post.data.title} description={post.data.summary} date={post.data.date} labels={labels}>
+    <Content />
+
+    {(post.data.repo || post.data.demo) && (
+      <div class="meta-list" style="margin-top: 1.5rem;">
+        {post.data.repo && (
+          <a class="btn" href={post.data.repo} target="_blank" rel="noreferrer">
+            Xem repository
+          </a>
+        )}
+        {post.data.demo && (
+          <a class="btn" href={post.data.demo} target="_blank" rel="noreferrer">
+            Xem demo
+          </a>
+        )}
+      </div>
+    )}
+  </PostLayout>
+</BaseLayout>

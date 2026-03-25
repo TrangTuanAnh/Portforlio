@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { entrySlug } from '../utils/content';
+
+type CtfEntry = CollectionEntry<'ctf'>;
+
+interface Props {
+  item: CtfEntry;
+}
+
+const { item } = Astro.props;
+const slug = entrySlug(item);
+const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+}).format(item.data.date);
+---
+
+<article class="card reveal">
+  <div class="meta-list">
+    <span class="meta">{formattedDate}</span>
+    <span class="badge">{item.data.category}</span>
+    <span class="meta">{item.data.event}</span>
+  </div>
+  <h3>
+    <a href={`/ctf/${slug}`}>{item.data.title}</a>
+  </h3>
+  <p>{item.data.summary}</p>
+  <div class="badge-list">
+    {item.data.tags.map((tag) => (
+      <span class="badge">#{tag}</span>
+    ))}
+  </div>
+  <a class="link-arrow" href={`/ctf/${slug}`}>Xem chi tiết →</a>
+</article>

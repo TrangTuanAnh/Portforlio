@@ -16,8 +16,17 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const categoryLabelMap: Record<CollectionEntry<'ctf'>['data']['category'], string> = {
+  web: 'Web',
+  pwn: 'Pwn',
+  reverse: 'Reverse',
+  crypto: 'Cryptography',
+  forensics: 'Forensics',
+  osint: 'OSINT',
+};
+const categoryLabel = categoryLabelMap[post.data.category];
 const labels = [
-  `Category: ${post.data.category}`,
+  `Category: ${categoryLabel}`,
   `Event: ${post.data.event}`,
   ...(post.data.difficulty ? [`Difficulty: ${post.data.difficulty}`] : []),
 ];

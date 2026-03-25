@@ -13,6 +13,15 @@ const { item } = Astro.props;
 const slug = entrySlug(item);
 const href = item.data.externalUrl ?? `/ctf/${slug}`;
 const isExternal = Boolean(item.data.externalUrl);
+const categoryLabelMap: Record<CtfEntry['data']['category'], string> = {
+  web: 'Web',
+  pwn: 'Pwn',
+  reverse: 'Reverse',
+  crypto: 'Cryptography',
+  forensics: 'Forensics',
+  osint: 'OSINT',
+};
+const categoryLabel = categoryLabelMap[item.data.category];
 const enable3d = SITE_CONFIG.ui.enable3dEffects;
 const cardClass = enable3d ? 'card reveal glass-panel tilt-3d depth-hover' : 'card reveal glass-panel';
 const cardTiltMax = SITE_CONFIG.ui.cardTiltMax;
@@ -26,7 +35,7 @@ const formattedDate = new Intl.DateTimeFormat('vi-VN', {
 <article class={cardClass} data-tilt-max={enable3d ? cardTiltMax : undefined}>
   <div class="meta-list">
     <span class="meta">{formattedDate}</span>
-    <span class="badge">{item.data.category}</span>
+    <span class="badge">{categoryLabel}</span>
     <span class="meta">{item.data.event}</span>
   </div>
   <h3>

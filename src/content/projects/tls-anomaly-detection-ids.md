@@ -1,23 +1,23 @@
 ---
-title: "TLS Anomaly Detection IDS"
+title: "Hệ thống IDS phát hiện bất thường TLS"
 date: 2026-03-25
-summary: "He thong IDS phat hien bat thuong luong TLS, huong toi giam false positive va theo doi hanh vi ket noi dang ngo."
+summary: "Hệ thống IDS phát hiện bất thường lưu lượng TLS, hướng tới giảm cảnh báo sai và theo dõi hành vi kết nối đáng ngờ."
 stack: ["Python", "Machine Learning", "Network Traffic Analysis", "TLS"]
 repo: "https://github.com/TrangTuanAnh/tls-anomaly-detection-ids"
 featured: true
 draft: false
 ---
 
-## Muc tieu
+## Mục tiêu
 
-Du an tap trung phat hien hanh vi bat thuong trong luong TLS de ho tro canh bao som cho he thong giam sat mang.
+Dự án tập trung phát hiện hành vi bất thường trong luồng TLS để hỗ trợ cảnh báo sớm cho hệ thống giám sát mạng.
 
-## Huong trien khai
+## Hướng triển khai
 
-- Trich xuat dac trung tu traffic TLS
-- Huan luyen mo hinh phat hien bat thuong
-- Danh gia theo precision/recall va kha nang ap dung thuc te
+- Trích xuất đặc trưng từ traffic TLS
+- Huấn luyện mô hình phát hiện bất thường
+- Đánh giá theo precision/recall và khả năng áp dụng thực tế
 
-## Trang thai
+## Trạng thái
 
-Source code va tai lieu chi tiet duoc cap nhat tren GitHub repo.
+Source code và tài liệu chi tiết được cập nhật trên GitHub repo.

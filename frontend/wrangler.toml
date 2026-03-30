@@ -6,4 +6,4 @@ pages_build_output_dir = "./dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "my-portfolio-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "d0564cde-5e93-4740-8512-eaf5a51a3a36"

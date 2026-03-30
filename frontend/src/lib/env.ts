@@ -1,3 +1,5 @@
+import { env as workerEnv } from 'cloudflare:workers';
+
 export interface D1PreparedStatement {
   bind(...values: unknown[]): D1PreparedStatement;
   first<T = Record<string, unknown>>(): Promise<T | null>;
@@ -31,25 +33,28 @@ const isRuntimeEnv = (value: unknown): value is PublicRuntimeEnv => {
   return record.DB !== undefined;
 };
 
-export const getPublicEnv = (locals: App.Locals): PublicRuntimeEnv => {
-  const runtimeEnv = locals.runtime?.env;
-  if (isRuntimeEnv(runtimeEnv)) return runtimeEnv;
-  if (!runtimeEnv || typeof runtimeEnv !== 'object') {
-    throw new Error('Cloudflare runtime env is not available. Ensure DB binding is configured.');
+const getRawEnv = (): Record<string, unknown> => {
+  if (!workerEnv || typeof workerEnv !== 'object') {
+    throw new Error('Cloudflare runtime env is not available. Ensure this code runs on Workers runtime.');
   }
+  return workerEnv as Record<string, unknown>;
+};
 
-  const record = runtimeEnv as Record<string, unknown>;
-  if (!record.DB) {
+export const getPublicEnv = (_locals?: App.Locals): PublicRuntimeEnv => {
+  const runtimeEnv = getRawEnv();
+  if (isRuntimeEnv(runtimeEnv)) return runtimeEnv;
+
+  if (!runtimeEnv.DB) {
     throw new Error('Missing D1 binding: DB');
   }
   return {
-    DB: record.DB as D1DatabaseLike,
+    DB: runtimeEnv.DB as D1DatabaseLike,
   };
 };
 
-export const getAdminEnv = (locals: App.Locals): AdminRuntimeEnv => {
+export const getAdminEnv = (locals?: App.Locals): AdminRuntimeEnv => {
   const publicEnv = getPublicEnv(locals);
-  const runtimeEnv = locals.runtime?.env as Record<string, unknown>;
+  const runtimeEnv = getRawEnv();
   return {
     DB: publicEnv.DB,
     ADMIN_USERNAME: assertString(runtimeEnv.ADMIN_USERNAME, 'ADMIN_USERNAME'),

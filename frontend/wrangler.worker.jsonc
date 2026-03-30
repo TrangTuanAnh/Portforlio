@@ -1,0 +1,14 @@
+{
+  "name": "my-portfolio",
+  "main": "./dist/server/entry.mjs",
+  "compatibility_date": "2026-03-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": { "binding": "ASSETS", "directory": "./dist/client" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "portfolio-db",
+      "database_id": "d0564cde-5e93-4740-8512-eaf5a51a3a36"
+    }
+  ]
+}

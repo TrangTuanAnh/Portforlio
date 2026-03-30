@@ -46,6 +46,29 @@ npm run db:seed
 
 và tạo `migrations/0002_seed.sql` để import 1 lần vào D1.
 
+## 3.1) One-command bootstrap (khuyên dùng)
+
+Nếu muốn gọn, dùng script tự động setup gần hết:
+
+```bash
+npm run cf:bootstrap -- --project my-portfolio --admin-user admin --admin-pass "YourStrongPassword123!"
+```
+
+Script sẽ:
+
+- kiểm tra `wrangler login`
+- tạo/cập nhật D1 binding `DB` trong `wrangler.toml` (nếu còn placeholder)
+- tạo Pages project (nếu chưa có)
+- set secrets `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_SECRET`
+- generate seed + migrate + seed remote D1
+- build + deploy Pages
+
+Tùy chọn:
+
+- `--skip-project-create`: bỏ qua bước tạo project
+- `--skip-deploy`: chỉ setup DB + secret, không deploy ngay
+- `--db-name <name>`: đổi tên D1 database khi tạo mới
+
 ## 4) Chạy app
 
 ```bash

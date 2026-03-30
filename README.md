@@ -24,9 +24,7 @@ npm run dev
 ```bash
 cd frontend
 npm install
-npm run db:migrate
-npm run db:seed:generate
-npm run db:seed
+npm run cf:bootstrap -- --project my-portfolio --admin-user admin --admin-pass "YourStrongPassword123!"
 npm run dev
 ```
 

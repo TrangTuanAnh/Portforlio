@@ -13,7 +13,8 @@
     "db:migrate": "wrangler d1 migrations apply DB",
     "db:seed:generate": "node scripts/generate-d1-seed.mjs",
     "db:seed": "wrangler d1 execute DB --file migrations/0002_seed.sql",
-    "db:setup": "npm run db:migrate && npm run db:seed"
+    "db:setup": "npm run db:migrate && npm run db:seed",
+    "cf:bootstrap": "node scripts/cf-bootstrap.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.4",

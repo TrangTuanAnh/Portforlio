@@ -1,0 +1,573 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { listPosts } from '../../lib/db';
+import { getLayoutData } from '../../lib/layout-data';
+
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const posts = await listPosts(env.DB, { includeDrafts: true });
+const bootstrap = {
+  profile,
+  siteConfig,
+  posts,
+};
+---
+
+<BaseLayout
+  title="Admin | Portfolio"
+  description="Admin dashboard quản lý profile, link và nội dung bài viết."
+  profile={profile}
+  siteConfig={siteConfig}
+>
+  <section class="section admin-head reveal glass-panel">
+    <div>
+      <h1 class="page-title">Admin Dashboard</h1>
+      <p class="page-description page-intro">
+        Quản lý toàn bộ profile, link hệ thống và nội dung CTF/Project/Blog trực tiếp từ một giao diện.
+      </p>
+    </div>
+    <button id="logout-btn" class="btn" type="button">Đăng xuất</button>
+  </section>
+
+  <p id="admin-status" class="admin-status reveal" role="status" aria-live="polite"></p>
+
+  <section class="section admin-grid">
+    <article class="admin-panel reveal glass-panel">
+      <h2 class="section-title">Profile</h2>
+      <form id="profile-form" class="admin-form">
+        <label>Tên hiển thị<input name="name" required /></label>
+        <label>Headline<input name="headline" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>GitHub URL<input name="github" required /></label>
+        <label>LinkedIn URL<input name="linkedin" required /></label>
+        <label>Location<input name="location" required /></label>
+        <label>Orientation<input name="orientation" required /></label>
+        <label>About intro<textarea name="aboutIntro" rows="3" required></textarea></label>
+        <label>Focus areas (mỗi dòng 1 item)<textarea name="focusAreasText" rows="4"></textarea></label>
+        <label>Tech stack (mỗi dòng 1 item)<textarea name="techStackText" rows="4"></textarea></label>
+        <label>Goals (mỗi dòng 1 item)<textarea name="goalsText" rows="4"></textarea></label>
+        <label>Resume URL<input name="resumeUrl" /></label>
+        <button class="btn" type="submit">Lưu Profile</button>
+      </form>
+    </article>
+
+    <article class="admin-panel reveal glass-panel">
+      <h2 class="section-title">Site Config</h2>
+      <form id="site-config-form" class="admin-form">
+        <label>Hero primary link<input name="heroPrimary" required /></label>
+        <label>Hero secondary link<input name="heroSecondary" required /></label>
+        <label>Hero contact link<input name="heroContact" required /></label>
+        <label>Writeup repo root<input name="writeupRepoRoot" /></label>
+        <label>Theme<input name="theme" required /></label>
+        <label class="admin-check">
+          <input name="enable3dEffects" type="checkbox" />
+          Bật hiệu ứng 3D
+        </label>
+        <label>Hero tilt max<input name="heroTiltMax" type="number" step="0.1" /></label>
+        <label>Card tilt max<input name="cardTiltMax" type="number" step="0.1" /></label>
+        <label>Info tilt max<input name="infoTiltMax" type="number" step="0.1" /></label>
+        <button class="btn" type="submit">Lưu Site Config</button>
+      </form>
+    </article>
+  </section>
+
+  <section class="section admin-panel reveal glass-panel">
+    <div class="admin-post-head">
+      <h2 class="section-title">Posts (CTF / Project / Blog)</h2>
+      <div class="admin-post-tools">
+        <label>
+          Type
+          <select id="post-filter-type">
+            <option value="">All</option>
+            <option value="ctf">CTF</option>
+            <option value="project">Project</option>
+            <option value="blog">Blog</option>
+          </select>
+        </label>
+        <label>
+          Status
+          <select id="post-filter-status">
+            <option value="all">All</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </label>
+        <button id="create-post-btn" class="btn" type="button">Tạo bài mới</button>
+      </div>
+    </div>
+
+    <div class="admin-post-layout">
+      <aside class="admin-post-list-wrap">
+        <ul id="post-list" class="admin-post-list"></ul>
+      </aside>
+
+      <form id="post-form" class="admin-form admin-post-form">
+        <input id="post-id" type="hidden" />
+        <label>
+          Type
+          <select id="post-type" name="type">
+            <option value="ctf">CTF</option>
+            <option value="project">Project</option>
+            <option value="blog">Blog</option>
+          </select>
+        </label>
+        <label>Title<input id="post-title" name="title" required /></label>
+        <label>Slug<input id="post-slug" name="slug" placeholder="auto nếu để trống" /></label>
+        <label>Date<input id="post-date" name="date" type="date" required /></label>
+        <label>Summary<textarea id="post-summary" name="summary" rows="3" required></textarea></label>
+        <label>Tags (mỗi dòng 1 tag)<textarea id="post-tags" name="tags" rows="3"></textarea></label>
+        <div class="admin-check-row">
+          <label class="admin-check">
+            <input id="post-featured" name="featured" type="checkbox" />
+            Featured
+          </label>
+          <label class="admin-check">
+            <input id="post-published" name="isPublished" type="checkbox" />
+            Published
+          </label>
+        </div>
+
+        <fieldset id="ctf-fields" class="admin-fieldset">
+          <legend>CTF fields</legend>
+          <label>
+            Category
+            <select id="post-ctf-category" name="ctfCategory">
+              <option value="">--</option>
+              <option value="web">web</option>
+              <option value="pwn">pwn</option>
+              <option value="reverse">reverse</option>
+              <option value="crypto">crypto</option>
+              <option value="forensics">forensics</option>
+              <option value="osint">osint</option>
+            </select>
+          </label>
+          <label>Event<input id="post-ctf-event" name="ctfEvent" /></label>
+          <label>Difficulty<input id="post-ctf-difficulty" name="ctfDifficulty" /></label>
+          <label>External URL<input id="post-ctf-external-url" name="ctfExternalUrl" /></label>
+        </fieldset>
+
+        <fieldset id="project-fields" class="admin-fieldset">
+          <legend>Project fields</legend>
+          <label>Stack (mỗi dòng 1 item)<textarea id="post-project-stack" name="projectStack" rows="3"></textarea></label>
+          <label>Repo URL<input id="post-project-repo" name="projectRepo" /></label>
+          <label>Demo URL<input id="post-project-demo" name="projectDemo" /></label>
+        </fieldset>
+
+        <label>Markdown content<textarea id="post-content" name="contentMarkdown" rows="12"></textarea></label>
+        <div class="admin-post-actions">
+          <button id="post-preview-btn" class="btn" type="button">Preview Markdown</button>
+          <button class="btn" type="submit">Lưu bài viết</button>
+          <button id="post-delete-btn" class="btn btn-danger" type="button">Xóa bài viết</button>
+        </div>
+
+        <article class="post admin-preview">
+          <header class="post-header">
+            <h3>Preview</h3>
+          </header>
+          <div id="post-preview" class="post-content"></div>
+        </article>
+      </form>
+    </div>
+  </section>
+
+  <script id="admin-bootstrap" type="application/json">{JSON.stringify(bootstrap)}</script>
+  <script is:inline>
+    (() => {
+      const bootstrapNode = document.getElementById('admin-bootstrap');
+      const bootstrap = bootstrapNode ? JSON.parse(bootstrapNode.textContent ?? '{}') : {};
+
+      const state = {
+        posts: Array.isArray(bootstrap.posts) ? bootstrap.posts : [],
+        selectedPostId: null,
+      };
+
+      const statusEl = document.getElementById('admin-status');
+      const postListEl = document.getElementById('post-list');
+      const postForm = document.getElementById('post-form');
+      const profileForm = document.getElementById('profile-form');
+      const siteConfigForm = document.getElementById('site-config-form');
+      const filterTypeEl = document.getElementById('post-filter-type');
+      const filterStatusEl = document.getElementById('post-filter-status');
+
+      const setStatus = (message, type = 'info') => {
+        if (!statusEl) return;
+        statusEl.textContent = message;
+        statusEl.dataset.state = type;
+      };
+
+      const lineList = (value) =>
+        (value ?? '')
+          .split('\n')
+          .map((item) => item.trim())
+          .filter(Boolean);
+
+      const setFormValue = (form, key, value) => {
+        const field = form?.elements?.namedItem(key);
+        if (!field) return;
+        if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+          field.checked = Boolean(value);
+          return;
+        }
+        field.value = value ?? '';
+      };
+
+      const getFormValue = (form, key) => {
+        const field = form?.elements?.namedItem(key);
+        if (!field) return '';
+        if (field instanceof HTMLInputElement && field.type === 'checkbox') {
+          return field.checked;
+        }
+        return typeof field.value === 'string' ? field.value : '';
+      };
+
+      const profileToEditor = (profile) => ({
+        ...profile,
+        focusAreasText: (profile.focusAreas ?? []).join('\n'),
+        techStackText: (profile.techStack ?? []).join('\n'),
+        goalsText: (profile.goals ?? []).join('\n'),
+      });
+
+      const fillProfileForm = (profile) => {
+        if (!profileForm) return;
+        const model = profileToEditor(profile);
+        Object.entries(model).forEach(([key, value]) => setFormValue(profileForm, key, value));
+      };
+
+      const fillSiteConfigForm = (config) => {
+        if (!siteConfigForm) return;
+        setFormValue(siteConfigForm, 'heroPrimary', config?.links?.heroPrimary ?? '');
+        setFormValue(siteConfigForm, 'heroSecondary', config?.links?.heroSecondary ?? '');
+        setFormValue(siteConfigForm, 'heroContact', config?.links?.heroContact ?? '');
+        setFormValue(siteConfigForm, 'writeupRepoRoot', config?.links?.writeupRepoRoot ?? '');
+        setFormValue(siteConfigForm, 'theme', config?.ui?.theme ?? '');
+        setFormValue(siteConfigForm, 'enable3dEffects', Boolean(config?.ui?.enable3dEffects));
+        setFormValue(siteConfigForm, 'heroTiltMax', config?.ui?.heroTiltMax ?? 5.5);
+        setFormValue(siteConfigForm, 'cardTiltMax', config?.ui?.cardTiltMax ?? 4.6);
+        setFormValue(siteConfigForm, 'infoTiltMax', config?.ui?.infoTiltMax ?? 3.8);
+      };
+
+      const slugify = (value) => {
+        return String(value ?? '')
+          .trim()
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+      };
+
+      const today = () => new Date().toISOString().slice(0, 10);
+
+      const blankPost = (type = 'ctf') => ({
+        id: '',
+        type,
+        title: '',
+        slug: '',
+        date: today(),
+        summary: '',
+        tags: [],
+        featured: false,
+        isPublished: false,
+        ctfCategory: '',
+        ctfEvent: '',
+        ctfDifficulty: '',
+        ctfExternalUrl: '',
+        projectStack: [],
+        projectRepo: '',
+        projectDemo: '',
+        contentMarkdown: '',
+      });
+
+      const fillPostForm = (post) => {
+        if (!postForm) return;
+        const model = post ?? blankPost(filterTypeEl?.value || 'ctf');
+        setFormValue(postForm, 'type', model.type);
+        const idField = document.getElementById('post-id');
+        if (idField) idField.value = model.id ? String(model.id) : '';
+        setFormValue(postForm, 'title', model.title ?? '');
+        setFormValue(postForm, 'slug', model.slug ?? '');
+        setFormValue(postForm, 'date', model.date ?? today());
+        setFormValue(postForm, 'summary', model.summary ?? '');
+        setFormValue(postForm, 'tags', (model.tags ?? []).join('\n'));
+        setFormValue(postForm, 'featured', Boolean(model.featured));
+        setFormValue(postForm, 'isPublished', Boolean(model.isPublished));
+        setFormValue(postForm, 'ctfCategory', model.ctfCategory ?? '');
+        setFormValue(postForm, 'ctfEvent', model.ctfEvent ?? '');
+        setFormValue(postForm, 'ctfDifficulty', model.ctfDifficulty ?? '');
+        setFormValue(postForm, 'ctfExternalUrl', model.ctfExternalUrl ?? '');
+        setFormValue(postForm, 'projectStack', (model.projectStack ?? []).join('\n'));
+        setFormValue(postForm, 'projectRepo', model.projectRepo ?? '');
+        setFormValue(postForm, 'projectDemo', model.projectDemo ?? '');
+        setFormValue(postForm, 'contentMarkdown', model.contentMarkdown ?? '');
+        updatePostTypeFieldVisibility();
+        renderPreview('');
+      };
+
+      const selectedType = () => String(getFormValue(postForm, 'type') || 'ctf');
+
+      const updatePostTypeFieldVisibility = () => {
+        const type = selectedType();
+        const ctfFields = document.getElementById('ctf-fields');
+        const projectFields = document.getElementById('project-fields');
+        if (ctfFields) ctfFields.hidden = type !== 'ctf';
+        if (projectFields) projectFields.hidden = type !== 'project';
+      };
+
+      const postFromForm = () => {
+        const type = selectedType();
+        const title = String(getFormValue(postForm, 'title')).trim();
+        const slugInput = String(getFormValue(postForm, 'slug')).trim();
+        return {
+          type,
+          title,
+          slug: slugInput || slugify(title),
+          date: String(getFormValue(postForm, 'date')),
+          summary: String(getFormValue(postForm, 'summary')).trim(),
+          tags: lineList(String(getFormValue(postForm, 'tags'))),
+          featured: Boolean(getFormValue(postForm, 'featured')),
+          isPublished: Boolean(getFormValue(postForm, 'isPublished')),
+          ctfCategory: String(getFormValue(postForm, 'ctfCategory')).trim(),
+          ctfEvent: String(getFormValue(postForm, 'ctfEvent')).trim(),
+          ctfDifficulty: String(getFormValue(postForm, 'ctfDifficulty')).trim(),
+          ctfExternalUrl: String(getFormValue(postForm, 'ctfExternalUrl')).trim(),
+          projectStack: lineList(String(getFormValue(postForm, 'projectStack'))),
+          projectRepo: String(getFormValue(postForm, 'projectRepo')).trim(),
+          projectDemo: String(getFormValue(postForm, 'projectDemo')).trim(),
+          contentMarkdown: String(getFormValue(postForm, 'contentMarkdown')),
+        };
+      };
+
+      const renderPostList = () => {
+        if (!postListEl) return;
+        postListEl.innerHTML = '';
+
+        const currentFilterType = filterTypeEl?.value || '';
+        const currentFilterStatus = filterStatusEl?.value || 'all';
+
+        const filtered = state.posts.filter((post) => {
+          if (currentFilterType && post.type !== currentFilterType) return false;
+          if (currentFilterStatus === 'published' && !post.isPublished) return false;
+          if (currentFilterStatus === 'draft' && post.isPublished) return false;
+          return true;
+        });
+
+        if (filtered.length === 0) {
+          const li = document.createElement('li');
+          li.className = 'admin-post-item';
+          li.textContent = 'Không có bài phù hợp bộ lọc.';
+          postListEl.appendChild(li);
+          return;
+        }
+
+        for (const post of filtered) {
+          const li = document.createElement('li');
+          li.className = 'admin-post-item';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'admin-post-btn';
+          if (state.selectedPostId === post.id) btn.classList.add('active');
+          btn.innerHTML = `
+            <strong>${post.title}</strong>
+            <span>${post.type.toUpperCase()} · ${post.date} · ${post.isPublished ? 'Published' : 'Draft'}</span>
+          `;
+          btn.addEventListener('click', () => {
+            state.selectedPostId = post.id;
+            fillPostForm(post);
+            renderPostList();
+          });
+          li.appendChild(btn);
+          postListEl.appendChild(li);
+        }
+      };
+
+      const renderPreview = (html) => {
+        const previewEl = document.getElementById('post-preview');
+        if (previewEl) previewEl.innerHTML = html || '<p class="section-subtext">Chưa có preview.</p>';
+      };
+
+      const fetchPosts = async () => {
+        const type = filterTypeEl?.value || '';
+        const status = filterStatusEl?.value || 'all';
+        const params = new URLSearchParams();
+        if (type) params.set('type', type);
+        if (status) params.set('status', status);
+
+        const response = await fetch(`/api/admin/posts?${params.toString()}`);
+        const payload = await response.json();
+        if (!response.ok) {
+          throw new Error(payload?.error ?? 'Không thể tải danh sách bài viết.');
+        }
+        state.posts = payload.data ?? [];
+      };
+
+      const reloadPosts = async () => {
+        await fetchPosts();
+        if (state.selectedPostId) {
+          const match = state.posts.find((post) => post.id === state.selectedPostId);
+          if (!match) {
+            state.selectedPostId = null;
+            fillPostForm(blankPost(filterTypeEl?.value || 'ctf'));
+          }
+        }
+        renderPostList();
+      };
+
+      const onProfileSubmit = async (event) => {
+        event.preventDefault();
+        const payload = {
+          name: String(getFormValue(profileForm, 'name')).trim(),
+          headline: String(getFormValue(profileForm, 'headline')).trim(),
+          email: String(getFormValue(profileForm, 'email')).trim(),
+          github: String(getFormValue(profileForm, 'github')).trim(),
+          linkedin: String(getFormValue(profileForm, 'linkedin')).trim(),
+          location: String(getFormValue(profileForm, 'location')).trim(),
+          orientation: String(getFormValue(profileForm, 'orientation')).trim(),
+          aboutIntro: String(getFormValue(profileForm, 'aboutIntro')).trim(),
+          focusAreas: lineList(String(getFormValue(profileForm, 'focusAreasText'))),
+          techStack: lineList(String(getFormValue(profileForm, 'techStackText'))),
+          goals: lineList(String(getFormValue(profileForm, 'goalsText'))),
+          resumeUrl: String(getFormValue(profileForm, 'resumeUrl')).trim(),
+        };
+
+        const response = await fetch('/api/admin/profile', {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error ?? 'Lưu profile thất bại.');
+        fillProfileForm(result.data);
+        setStatus('Đã lưu Profile thành công.', 'ok');
+      };
+
+      const onSiteConfigSubmit = async (event) => {
+        event.preventDefault();
+        const payload = {
+          links: {
+            heroPrimary: String(getFormValue(siteConfigForm, 'heroPrimary')).trim(),
+            heroSecondary: String(getFormValue(siteConfigForm, 'heroSecondary')).trim(),
+            heroContact: String(getFormValue(siteConfigForm, 'heroContact')).trim(),
+            writeupRepoRoot: String(getFormValue(siteConfigForm, 'writeupRepoRoot')).trim(),
+          },
+          ui: {
+            theme: String(getFormValue(siteConfigForm, 'theme')).trim(),
+            enable3dEffects: Boolean(getFormValue(siteConfigForm, 'enable3dEffects')),
+            heroTiltMax: Number(getFormValue(siteConfigForm, 'heroTiltMax')),
+            cardTiltMax: Number(getFormValue(siteConfigForm, 'cardTiltMax')),
+            infoTiltMax: Number(getFormValue(siteConfigForm, 'infoTiltMax')),
+          },
+        };
+
+        const response = await fetch('/api/admin/site-config', {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error ?? 'Lưu site config thất bại.');
+        fillSiteConfigForm(result.data);
+        setStatus('Đã lưu Site Config thành công.', 'ok');
+      };
+
+      const onPostSubmit = async (event) => {
+        event.preventDefault();
+        const payload = postFromForm();
+        const id = document.getElementById('post-id')?.value;
+        const method = id ? 'PUT' : 'POST';
+        const endpoint = id ? `/api/admin/posts/${id}` : '/api/admin/posts';
+
+        const response = await fetch(endpoint, {
+          method,
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error ?? 'Lưu bài viết thất bại.');
+
+        state.selectedPostId = result?.data?.id ?? null;
+        await reloadPosts();
+        const latest = state.posts.find((post) => post.id === state.selectedPostId);
+        if (latest) fillPostForm(latest);
+        setStatus('Đã lưu bài viết thành công.', 'ok');
+      };
+
+      const onPostDelete = async () => {
+        const id = document.getElementById('post-id')?.value;
+        if (!id) {
+          setStatus('Bài viết chưa được tạo nên không thể xóa.', 'warn');
+          return;
+        }
+        if (!confirm('Bạn chắc chắn muốn xóa bài viết này?')) return;
+
+        const response = await fetch(`/api/admin/posts/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error ?? 'Xóa bài viết thất bại.');
+
+        state.selectedPostId = null;
+        fillPostForm(blankPost(filterTypeEl?.value || 'ctf'));
+        await reloadPosts();
+        setStatus('Đã xóa bài viết.', 'ok');
+      };
+
+      const onPreviewClick = async () => {
+        const markdown = String(getFormValue(postForm, 'contentMarkdown'));
+        const response = await fetch('/api/admin/markdown/preview', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ markdown }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result?.error ?? 'Preview thất bại.');
+        renderPreview(result?.data?.html ?? '');
+      };
+
+      const onLogout = async () => {
+        await fetch('/api/admin/auth/logout', { method: 'POST' });
+        window.location.href = '/admin/login';
+      };
+
+      const bindEvents = () => {
+        profileForm?.addEventListener('submit', (event) => {
+          onProfileSubmit(event).catch((error) => setStatus(error.message, 'error'));
+        });
+        siteConfigForm?.addEventListener('submit', (event) => {
+          onSiteConfigSubmit(event).catch((error) => setStatus(error.message, 'error'));
+        });
+        postForm?.addEventListener('submit', (event) => {
+          onPostSubmit(event).catch((error) => setStatus(error.message, 'error'));
+        });
+        document.getElementById('post-delete-btn')?.addEventListener('click', () => {
+          onPostDelete().catch((error) => setStatus(error.message, 'error'));
+        });
+        document.getElementById('post-preview-btn')?.addEventListener('click', () => {
+          onPreviewClick().catch((error) => setStatus(error.message, 'error'));
+        });
+        document.getElementById('logout-btn')?.addEventListener('click', () => {
+          onLogout().catch(() => setStatus('Không thể đăng xuất.', 'error'));
+        });
+        document.getElementById('post-type')?.addEventListener('change', () => {
+          updatePostTypeFieldVisibility();
+        });
+        document.getElementById('create-post-btn')?.addEventListener('click', () => {
+          state.selectedPostId = null;
+          fillPostForm(blankPost(filterTypeEl?.value || 'ctf'));
+          renderPostList();
+        });
+        filterTypeEl?.addEventListener('change', () => {
+          reloadPosts().catch((error) => setStatus(error.message, 'error'));
+        });
+        filterStatusEl?.addEventListener('change', () => {
+          reloadPosts().catch((error) => setStatus(error.message, 'error'));
+        });
+      };
+
+      fillProfileForm(bootstrap.profile ?? {});
+      fillSiteConfigForm(bootstrap.siteConfig ?? {});
+      fillPostForm(null);
+      renderPostList();
+      bindEvents();
+      setStatus('Dashboard đã sẵn sàng.', 'ok');
+    })();
+  </script>
+</BaseLayout>

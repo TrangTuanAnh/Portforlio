@@ -1,16 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CardBlog from '../../components/CardBlog.astro';
-import { publishedOnly, sortByDateDesc } from '../../utils/content';
-import { hasMarkdownContent } from '../../utils/contentPresence';
+import { listPosts } from '../../lib/db';
+import { getLayoutData } from '../../lib/layout-data';
 
-const blogItems = hasMarkdownContent('src/content/blog')
-  ? sortByDateDesc(await getCollection('blog', publishedOnly))
-  : [];
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const blogItems = await listPosts(env.DB, { type: 'blog' });
 ---
 
-<BaseLayout title="Blog | Portfolio An Ninh Mạng" description="Bài viết ngoài CTF: learning log, note và workflow kỹ thuật.">
+<BaseLayout
+  title="Blog | Portfolio An Ninh Mạng"
+  description="Bài viết ngoài CTF: learning log, note và workflow kỹ thuật."
+  profile={profile}
+  siteConfig={siteConfig}
+>
   <section class="reveal">
     <h1 class="page-title">Blog</h1>
     <p class="page-description page-intro">
@@ -21,7 +24,7 @@ const blogItems = hasMarkdownContent('src/content/blog')
   <section class="section">
     {blogItems.length > 0 ? (
       <div class="grid cols-2">
-        {blogItems.map((item) => <CardBlog item={item} />)}
+        {blogItems.map((item) => <CardBlog item={item} siteConfig={siteConfig} />)}
       </div>
     ) : (
       <p class="empty-state glass-panel">Bạn chưa có bài blog public nào ở thời điểm này.</p>

@@ -1,103 +1,75 @@
-# Portfolio An Ninh Mạng (Astro + Cloudflare Pages)
+# Portfolio CMS (Astro SSR + Cloudflare D1)
 
-Tai lieu nay danh cho app trong thu muc `frontend/`.
+Bản này đã chuyển từ static JSON/markdown runtime sang kiến trúc CMS:
 
-Portfolio static-first cho CTF writeup, security projects và blog kỹ thuật.
-Giao diện hiện tại: light glass pastel, kèm hieu ung 3D nhe tren hero/card/info block.
+- Public site render từ D1 theo thời gian thực.
+- Hero có WebGL 3D (desktop) + fallback 2D (mobile/reduced motion).
+- Có admin dashboard để quản lý profile, site config, và toàn bộ bài viết.
 
-## 1) Yêu cầu môi trường
-
-- Node.js LTS (khuyến nghị >= 22)
-- npm
-
-Kiểm tra nhanh:
-
-```bash
-node -v
-npm -v
-```
-
-## 2) Chạy local
+## 1) Cài dependencies
 
 ```bash
 npm install
+```
+
+## 2) Cấu hình Cloudflare
+
+File `wrangler.toml` đã có sẵn, cần thay:
+
+- `database_id` trong `[[d1_databases]]`
+
+Set secret/env cho runtime:
+
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD_HASH` (bcrypt hash)
+- `ADMIN_SESSION_SECRET`
+
+Ví dụ tạo hash nhanh:
+
+```bash
+node -e "import('bcryptjs').then(({hash}) => hash('your-password', 12).then(console.log))"
+```
+
+## 3) Tạo schema + seed dữ liệu ban đầu
+
+```bash
+npm run db:migrate
+npm run db:seed:generate
+npm run db:seed
+```
+
+`db:seed:generate` sẽ đọc:
+
+- `public/personal/profile.json`
+- `public/personal/site-config.json`
+- `src/content/**/*.md`
+
+và tạo `migrations/0002_seed.sql` để import 1 lần vào D1.
+
+## 4) Chạy app
+
+```bash
 npm run dev
 ```
 
-Site local mặc định: `http://localhost:4321`
+Các route chính:
 
-## 3) Build production
+- Public: `/`, `/ctf`, `/project`, `/blog`, `/about`, `/contact`
+- Admin login: `/admin/login`
+- Admin dashboard: `/admin`
 
-```bash
-npm run build
-npm run preview
-```
+## 5) Admin API
 
-Output build: `dist/`
+- `POST /api/admin/auth/login`
+- `POST /api/admin/auth/logout`
+- `GET/PUT /api/admin/profile`
+- `GET/PUT /api/admin/site-config`
+- `GET/POST /api/admin/posts`
+- `GET/PUT/DELETE /api/admin/posts/:id`
+- `POST /api/admin/markdown/preview`
 
-## 4) Trung tâm chỉnh thông tin + upload file
+## 6) Lưu ý vận hành
 
-Bạn chỉ cần làm việc ở **một thư mục chung**:
-
-- `public/personal/profile.json`: chỉnh thông tin cá nhân
-- `public/personal/uploads/`: upload file public (CV, avatar, cert...)
-- `public/personal/site-config.json`: chỉnh link CTA + bật/tắt 3D + độ nghiêng hiệu ứng
-- `public/personal/HUONG_DAN_LINK_UI.md`: tài liệu nhanh để biết gắn link ở đâu
-
-Ví dụ:
-
-- `public/personal/uploads/resume.pdf` -> truy cập `/personal/uploads/resume.pdf`
-- Trong `profile.json`, trường `resumeFile` đặt là `/personal/uploads/resume.pdf`
-
-Các trang `Hero`, `About`, `Contact`, `Footer` đọc dữ liệu từ `public/personal/profile.json`.
-Hiệu ứng 3D và link CTA đọc từ `public/personal/site-config.json`.
-
-## 5) Cấu trúc nội dung bài viết
-
-- `src/content/ctf`: CTF writeup
-- `src/content/projects`: Project/lab/tool
-- `src/content/blog`: bài blog ngoài CTF
-- `src/content.config.ts`: schema cho content collections
-
-Với CTF writeup, bạn có thể chỉ lưu metadata trên site và nhảy ra repo bằng `externalUrl` trong frontmatter:
-
-```md
-externalUrl: "https://github.com/<username>/<repo>/blob/main/path/to/writeup.md"
-```
-
-Quy tắc hiển thị:
-
-- `draft: true` => không hiển thị public
-- Sort theo `date` giảm dần
-- Khu vực featured trên trang chủ chỉ lấy `featured: true`
-
-## 6) Deploy Cloudflare Pages
-
-Thiết lập trong Cloudflare Pages:
-
-- Build command: `npm run build`
-- Build output directory: `dist`
-- Production branch: `main`
-- Root directory: `frontend`
-
-Luồng gợi ý:
-
-1. Push code lên GitHub.
-2. Kết nối repo với Cloudflare Pages.
-3. Điền đúng build config bên trên.
-4. Mỗi lần push `main` sẽ tự động deploy.
-
-## 7) Checklist trước public
-
-- [ ] Không có `.env`, token, API key, secret trong repo.
-- [ ] Rà lại writeup để không lộ dữ liệu nhạy cảm/flag thật.
-- [ ] Tất cả route chính mở được: `/`, `/ctf`, `/project`, `/blog`, `/about`, `/contact`.
-- [ ] Ảnh/link ngoài không hỏng.
-- [ ] Build production pass.
-
-## 8) Backlog phase 2
-
-- Filter/tag cho CTF và Blog
-- Dark mode toggle theo preference người dùng
-- Analytics nhẹ
-- Contact form với Pages Functions (khi thật sự cần)
+- Public site giờ lấy dữ liệu trực tiếp từ D1.
+- Markdown/json cũ giữ lại để backup và làm nguồn seed, không còn là nguồn runtime chính.
+- Non-GET admin API yêu cầu same-origin và session cookie `HttpOnly`.

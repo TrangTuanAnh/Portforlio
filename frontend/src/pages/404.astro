@@ -1,8 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLayoutData } from '../lib/layout-data';
+
+const { profile, siteConfig } = await getLayoutData(Astro.locals);
 ---
 
-<BaseLayout title="404 | Portfolio An Ninh Mạng" description="Không tìm thấy trang bạn yêu cầu.">
+<BaseLayout
+  title="404 | Portfolio An Ninh Mạng"
+  description="Không tìm thấy trang bạn yêu cầu."
+  profile={profile}
+  siteConfig={siteConfig}
+>
   <section class="hero reveal">
     <span class="hero-chip">404 Not Found</span>
     <h1>Trang này không tồn tại</h1>

@@ -1,24 +1,22 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { entrySlug } from '../utils/content';
-import { SITE_CONFIG } from '../siteConfig';
+import type { PostRecord, SiteConfig } from '../lib/models';
 
-type BlogEntry = CollectionEntry<'blog'>;
+type BlogEntry = PostRecord;
 
 interface Props {
   item: BlogEntry;
+  siteConfig: SiteConfig;
 }
 
-const { item } = Astro.props;
-const slug = entrySlug(item);
-const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const { item, siteConfig } = Astro.props;
+const enable3d = siteConfig.ui.enable3dEffects;
 const cardClass = enable3d ? 'card reveal glass-panel tilt-3d depth-hover' : 'card reveal glass-panel';
-const cardTiltMax = SITE_CONFIG.ui.cardTiltMax;
+const cardTiltMax = siteConfig.ui.cardTiltMax;
 const formattedDate = new Intl.DateTimeFormat('vi-VN', {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
-}).format(item.data.date);
+}).format(new Date(`${item.date}T00:00:00.000Z`));
 ---
 
 <article class={cardClass} data-tilt-max={enable3d ? cardTiltMax : undefined}>
@@ -26,13 +24,13 @@ const formattedDate = new Intl.DateTimeFormat('vi-VN', {
     <span class="meta">{formattedDate}</span>
   </div>
   <h3>
-    <a href={`/blog/${slug}`}>{item.data.title}</a>
+    <a href={`/blog/${item.slug}`}>{item.title}</a>
   </h3>
-  <p>{item.data.summary}</p>
+  <p>{item.summary}</p>
   <div class="badge-list">
-    {item.data.tags.map((tag) => (
+    {item.tags.map((tag) => (
       <span class="badge">#{tag}</span>
     ))}
   </div>
-  <a class="link-arrow" href={`/blog/${slug}`}>Đọc bài →</a>
+  <a class="link-arrow" href={`/blog/${item.slug}`}>Đọc bài →</a>
 </article>

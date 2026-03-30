@@ -1,43 +1,57 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { entrySlug, publishedOnly, sortByDateDesc } from '../../utils/content';
-import { hasMarkdownContent } from '../../utils/contentPresence';
+import { marked } from 'marked';
+import { getPostBySlug } from '../../lib/db';
+import { getLayoutData } from '../../lib/layout-data';
 
-export async function getStaticPaths() {
-  if (!hasMarkdownContent('src/content/projects')) return [];
-  const posts = sortByDateDesc(await getCollection('projects', publishedOnly));
-  return posts.map((post) => ({ params: { slug: entrySlug(post) }, props: { post } }));
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const slug = Astro.params.slug ?? '';
+const post = await getPostBySlug(env.DB, 'project', slug);
+
+if (!post) {
+  Astro.response.status = 404;
 }
 
-interface Props {
-  post: CollectionEntry<'projects'>;
-}
-
-const { post } = Astro.props;
-const { Content } = await render(post);
-const labels = [...post.data.stack, ...(post.data.repo ? ['Repo available'] : []), ...(post.data.demo ? ['Demo available'] : [])];
+const labels = post
+  ? [...post.projectStack, ...(post.projectRepo ? ['Repo available'] : []), ...(post.projectDemo ? ['Demo available'] : [])]
+  : [];
+const html = post ? await marked.parse(post.contentMarkdown || '') : '';
 ---
 
-<BaseLayout title={`${post.data.title} | Project`} description={post.data.summary}>
-  <PostLayout title={post.data.title} description={post.data.summary} date={post.data.date} labels={labels}>
-    <Content />
+<BaseLayout
+  title={post ? `${post.title} | Project` : '404 | Project'}
+  description={post?.summary ?? 'Không tìm thấy project bạn yêu cầu.'}
+  profile={profile}
+  siteConfig={siteConfig}
+>
+  {post ? (
+    <PostLayout title={post.title} description={post.summary} date={new Date(`${post.date}T00:00:00.000Z`)} labels={labels}>
+      <Fragment set:html={html} />
 
-    {(post.data.repo || post.data.demo) && (
-      <div class="meta-list" style="margin-top: 1.5rem;">
-        {post.data.repo && (
-          <a class="btn" href={post.data.repo} target="_blank" rel="noreferrer">
-            Xem repository
-          </a>
-        )}
-        {post.data.demo && (
-          <a class="btn" href={post.data.demo} target="_blank" rel="noreferrer">
-            Xem demo
-          </a>
-        )}
+      {(post.projectRepo || post.projectDemo) && (
+        <div class="meta-list" style="margin-top: 1.5rem;">
+          {post.projectRepo && (
+            <a class="btn" href={post.projectRepo} target="_blank" rel="noreferrer">
+              Xem repository
+            </a>
+          )}
+          {post.projectDemo && (
+            <a class="btn" href={post.projectDemo} target="_blank" rel="noreferrer">
+              Xem demo
+            </a>
+          )}
+        </div>
+      )}
+    </PostLayout>
+  ) : (
+    <section class="hero reveal">
+      <span class="hero-chip">404 Not Found</span>
+      <h1>Project không tồn tại</h1>
+      <p>Slug này chưa có nội dung public trong hệ thống CMS.</p>
+      <div class="hero-cta">
+        <a class="btn" href="/project">Quay lại Project</a>
       </div>
-    )}
-  </PostLayout>
+    </section>
+  )}
 </BaseLayout>

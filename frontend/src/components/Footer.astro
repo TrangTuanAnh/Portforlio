@@ -1,16 +1,22 @@
 ---
-import { PROFILE } from '../profile';
+import type { ProfileData } from '../lib/models';
+
+interface Props {
+  profile: ProfileData;
+}
+
+const { profile } = Astro.props;
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="footer glass-panel depth-hover">
   <small>
-    © {year} {PROFILE.name}. Portfolio static-first với Astro + Cloudflare Pages.
+    © {year} {profile.name}. Portfolio CMS với Astro SSR + Cloudflare D1.
   </small>
   <div class="footer-links">
-    <a href={PROFILE.github} target="_blank" rel="noreferrer">GitHub</a>
-    <a href={PROFILE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-    <a href={`mailto:${PROFILE.email}`}>Email</a>
+    <a href={profile.github} target="_blank" rel="noreferrer">GitHub</a>
+    <a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+    <a href={`mailto:${profile.email}`}>Email</a>
   </div>
 </footer>

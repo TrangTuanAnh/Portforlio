@@ -1,14 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { PROFILE } from '../profile';
-import { SITE_CONFIG } from '../siteConfig';
+import { getLayoutData } from '../lib/layout-data';
 
-const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const { profile, siteConfig } = await getLayoutData(Astro.locals);
+const enable3d = siteConfig.ui.enable3dEffects;
 const infoClass = enable3d ? 'info-card reveal glass-panel tilt-3d depth-hover' : 'info-card reveal glass-panel';
-const infoTiltMax = SITE_CONFIG.ui.infoTiltMax;
+const infoTiltMax = siteConfig.ui.infoTiltMax;
 ---
 
-<BaseLayout title="Contact | Portfolio An Ninh Mạng" description="Các kênh liên hệ: Email, GitHub, LinkedIn.">
+<BaseLayout
+  title="Contact | Portfolio An Ninh Mạng"
+  description="Các kênh liên hệ: Email, GitHub, LinkedIn."
+  profile={profile}
+  siteConfig={siteConfig}
+>
   <section class="reveal">
     <h1 class="page-title">Contact</h1>
     <p class="page-description page-intro">
@@ -20,26 +25,26 @@ const infoTiltMax = SITE_CONFIG.ui.infoTiltMax;
     <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>Email</h3>
       <p>Phù hợp cho trao đổi công việc hoặc hợp tác kỹ thuật.</p>
-      <a class="btn" href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+      <a class="btn" href={`mailto:${profile.email}`}>{profile.email}</a>
     </article>
 
     <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>GitHub</h3>
       <p>Xem source code project, lịch sử commit và thử nghiệm tooling.</p>
-      <a class="btn" href={PROFILE.github} target="_blank" rel="noreferrer">Mở GitHub</a>
+      <a class="btn" href={profile.github} target="_blank" rel="noreferrer">Mở GitHub</a>
     </article>
 
     <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
       <h3>LinkedIn</h3>
       <p>Kênh phù hợp cho networking chuyên nghiệp và cập nhật định hướng nghề nghiệp.</p>
-      <a class="btn" href={PROFILE.linkedin} target="_blank" rel="noreferrer">Mở LinkedIn</a>
+      <a class="btn" href={profile.linkedin} target="_blank" rel="noreferrer">Mở LinkedIn</a>
     </article>
 
-    {PROFILE.resumeFile && (
+    {profile.resumeUrl && (
       <article class={infoClass} data-tilt-max={enable3d ? infoTiltMax : undefined}>
         <h3>CV / Resume</h3>
-        <p>File được lấy từ thư mục upload chung: <code>/public/personal/uploads</code>.</p>
-        <a class="btn" href={PROFILE.resumeFile} target="_blank" rel="noreferrer">
+        <p>URL CV được quản lý qua Admin CMS.</p>
+        <a class="btn" href={profile.resumeUrl} target="_blank" rel="noreferrer">
           Mở CV
         </a>
       </article>

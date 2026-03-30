@@ -1,22 +1,24 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostLayout from '../../layouts/PostLayout.astro';
-import { entrySlug, publishedOnly, sortByDateDesc } from '../../utils/content';
+import { marked } from 'marked';
+import { getPostBySlug } from '../../lib/db';
+import { getLayoutData } from '../../lib/layout-data';
+import type { CtfCategory } from '../../lib/models';
 
-export async function getStaticPaths() {
-  const posts = sortByDateDesc(await getCollection('ctf', publishedOnly)).filter((post) => !post.data.externalUrl);
-  return posts.map((post) => ({ params: { slug: entrySlug(post) }, props: { post } }));
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const slug = Astro.params.slug ?? '';
+const post = await getPostBySlug(env.DB, 'ctf', slug);
+
+if (post?.ctfExternalUrl) {
+  return Astro.redirect(post.ctfExternalUrl);
 }
 
-interface Props {
-  post: CollectionEntry<'ctf'>;
+if (!post) {
+  Astro.response.status = 404;
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
-const categoryLabelMap: Record<CollectionEntry<'ctf'>['data']['category'], string> = {
+const categoryLabelMap: Record<CtfCategory, string> = {
   web: 'Web',
   pwn: 'Pwn',
   reverse: 'Reverse',
@@ -24,16 +26,34 @@ const categoryLabelMap: Record<CollectionEntry<'ctf'>['data']['category'], strin
   forensics: 'Forensics',
   osint: 'OSINT',
 };
-const categoryLabel = categoryLabelMap[post.data.category];
-const labels = [
-  `Category: ${categoryLabel}`,
-  `Event: ${post.data.event}`,
-  ...(post.data.difficulty ? [`Difficulty: ${post.data.difficulty}`] : []),
-];
+const labels = post
+  ? [
+      ...(post.ctfCategory ? [`Category: ${categoryLabelMap[post.ctfCategory]}`] : []),
+      ...(post.ctfEvent ? [`Event: ${post.ctfEvent}`] : []),
+      ...(post.ctfDifficulty ? [`Difficulty: ${post.ctfDifficulty}`] : []),
+    ]
+  : [];
+const html = post ? await marked.parse(post.contentMarkdown || '') : '';
 ---
 
-<BaseLayout title={`${post.data.title} | CTF`} description={post.data.summary}>
-  <PostLayout title={post.data.title} description={post.data.summary} date={post.data.date} labels={labels}>
-    <Content />
-  </PostLayout>
+<BaseLayout
+  title={post ? `${post.title} | CTF` : '404 | CTF'}
+  description={post?.summary ?? 'Không tìm thấy bài CTF bạn yêu cầu.'}
+  profile={profile}
+  siteConfig={siteConfig}
+>
+  {post ? (
+    <PostLayout title={post.title} description={post.summary} date={new Date(`${post.date}T00:00:00.000Z`)} labels={labels}>
+      <Fragment set:html={html} />
+    </PostLayout>
+  ) : (
+    <section class="hero reveal">
+      <span class="hero-chip">404 Not Found</span>
+      <h1>Bài CTF không tồn tại</h1>
+      <p>Slug này chưa có nội dung public trong hệ thống CMS.</p>
+      <div class="hero-cta">
+        <a class="btn" href="/ctf">Quay lại CTF</a>
+      </div>
+    </section>
+  )}
 </BaseLayout>

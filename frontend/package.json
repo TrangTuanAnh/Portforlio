@@ -9,9 +9,21 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:migrate": "wrangler d1 migrations apply DB",
+    "db:seed:generate": "node scripts/generate-d1-seed.mjs",
+    "db:seed": "wrangler d1 execute DB --file migrations/0002_seed.sql",
+    "db:setup": "npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
-    "astro": "^6.0.8"
+    "@astrojs/cloudflare": "^13.1.4",
+    "astro": "^6.0.8",
+    "bcryptjs": "^3.0.3",
+    "gray-matter": "^4.0.3",
+    "marked": "^17.0.5",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "wrangler": "^4.78.0"
   }
 }

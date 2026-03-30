@@ -1,19 +1,17 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { entrySlug } from '../utils/content';
-import { SITE_CONFIG } from '../siteConfig';
+import type { PostRecord, SiteConfig } from '../lib/models';
 
-type CtfEntry = CollectionEntry<'ctf'>;
+type CtfEntry = PostRecord;
 
 interface Props {
   item: CtfEntry;
+  siteConfig: SiteConfig;
 }
 
-const { item } = Astro.props;
-const slug = entrySlug(item);
-const href = item.data.externalUrl ?? `/ctf/${slug}`;
-const isExternal = Boolean(item.data.externalUrl);
-const categoryLabelMap: Record<CtfEntry['data']['category'], string> = {
+const { item, siteConfig } = Astro.props;
+const href = item.ctfExternalUrl ?? `/ctf/${item.slug}`;
+const isExternal = Boolean(item.ctfExternalUrl);
+const categoryLabelMap: Record<NonNullable<CtfEntry['ctfCategory']>, string> = {
   web: 'Web',
   pwn: 'Pwn',
   reverse: 'Reverse',
@@ -21,31 +19,31 @@ const categoryLabelMap: Record<CtfEntry['data']['category'], string> = {
   forensics: 'Forensics',
   osint: 'OSINT',
 };
-const categoryLabel = categoryLabelMap[item.data.category];
-const enable3d = SITE_CONFIG.ui.enable3dEffects;
+const categoryLabel = item.ctfCategory ? categoryLabelMap[item.ctfCategory] : 'CTF';
+const enable3d = siteConfig.ui.enable3dEffects;
 const cardClass = enable3d ? 'card reveal glass-panel tilt-3d depth-hover' : 'card reveal glass-panel';
-const cardTiltMax = SITE_CONFIG.ui.cardTiltMax;
+const cardTiltMax = siteConfig.ui.cardTiltMax;
 const formattedDate = new Intl.DateTimeFormat('vi-VN', {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
-}).format(item.data.date);
+}).format(new Date(`${item.date}T00:00:00.000Z`));
 ---
 
 <article class={cardClass} data-tilt-max={enable3d ? cardTiltMax : undefined}>
   <div class="meta-list">
     <span class="meta">{formattedDate}</span>
     <span class="badge">{categoryLabel}</span>
-    <span class="meta">{item.data.event}</span>
+    {item.ctfEvent && <span class="meta">{item.ctfEvent}</span>}
   </div>
   <h3>
     <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noreferrer' : undefined}>
-      {item.data.title}
+      {item.title}
     </a>
   </h3>
-  <p>{item.data.summary}</p>
+  <p>{item.summary}</p>
   <div class="badge-list">
-    {item.data.tags.map((tag) => (
+    {item.tags.map((tag) => (
       <span class="badge">#{tag}</span>
     ))}
   </div>

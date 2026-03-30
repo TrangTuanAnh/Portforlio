@@ -1,16 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CardProject from '../../components/CardProject.astro';
-import { publishedOnly, sortByDateDesc } from '../../utils/content';
-import { hasMarkdownContent } from '../../utils/contentPresence';
+import { listPosts } from '../../lib/db';
+import { getLayoutData } from '../../lib/layout-data';
 
-const projectItems = hasMarkdownContent('src/content/projects')
-  ? sortByDateDesc(await getCollection('projects', publishedOnly))
-  : [];
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const projectItems = await listPosts(env.DB, { type: 'project' });
 ---
 
-<BaseLayout title="Project | Portfolio An Ninh Mạng" description="Các dự án tool/lab security với mô tả mục tiêu, stack và giới hạn.">
+<BaseLayout
+  title="Project | Portfolio An Ninh Mạng"
+  description="Các dự án tool/lab security với mô tả mục tiêu, stack và giới hạn."
+  profile={profile}
+  siteConfig={siteConfig}
+>
   <section class="reveal">
     <h1 class="page-title">Projects</h1>
     <p class="page-description page-intro">
@@ -21,7 +24,7 @@ const projectItems = hasMarkdownContent('src/content/projects')
   <section class="section">
     {projectItems.length > 0 ? (
       <div class="grid cols-2">
-        {projectItems.map((item) => <CardProject item={item} />)}
+        {projectItems.map((item) => <CardProject item={item} siteConfig={siteConfig} />)}
       </div>
     ) : (
       <p class="empty-state glass-panel">Bạn chưa có project public nào ở thời điểm này.</p>

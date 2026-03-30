@@ -1,22 +1,30 @@
 ---
-import { PROFILE } from '../profile';
-import { SITE_CONFIG } from '../siteConfig';
+import type { ProfileData, SiteConfig } from '../lib/models';
 
-const enable3d = SITE_CONFIG.ui.enable3dEffects;
+interface Props {
+  profile: ProfileData;
+  siteConfig: SiteConfig;
+}
+
+const { profile, siteConfig } = Astro.props;
+
+const enable3d = siteConfig.ui.enable3dEffects;
 const heroClass = enable3d ? 'hero reveal glass-panel tilt-3d depth-hover' : 'hero reveal glass-panel';
-const heroTiltMax = SITE_CONFIG.ui.heroTiltMax;
+const heroTiltMax = siteConfig.ui.heroTiltMax;
 ---
 
 <section class={heroClass} data-tilt-max={enable3d ? heroTiltMax : undefined}>
   <span class="hero-chip">CTF Writeup · Security Projects · Learning Log</span>
-  <h1>{PROFILE.name}</h1>
+  <h1>{profile.name}</h1>
   <p>
-    {PROFILE.headline}. Mình chia sẻ quá trình học an ninh mạng một cách thực tế: từ cách phân tích
+    {profile.headline}. Mình chia sẻ quá trình học an ninh mạng một cách thực tế: từ cách phân tích
     challenge CTF đến xây công cụ nhỏ phục vụ phòng thủ và nghiên cứu.
   </p>
   <div class="hero-cta">
-    <a class="btn" href={SITE_CONFIG.links.heroPrimary}>Xem CTF Writeup</a>
-    <a class="btn" href={SITE_CONFIG.links.heroSecondary}>Khám phá Project</a>
-    <a class="btn" href={SITE_CONFIG.links.heroContact || `mailto:${PROFILE.email}`}>Liên hệ nhanh</a>
+    <a class="btn" href={siteConfig.links.heroPrimary}>Xem CTF Writeup</a>
+    <a class="btn" href={siteConfig.links.heroSecondary}>Khám phá Project</a>
+    <a class="btn" href={siteConfig.links.heroContact || `mailto:${profile.email}`}>Liên hệ nhanh</a>
   </div>
+  {enable3d && <div class="hero-3d-canvas" data-cyber-sphere aria-hidden="true"></div>}
+  {enable3d && <div class="hero-3d-fallback" aria-hidden="true"></div>}
 </section>

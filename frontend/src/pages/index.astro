@@ -1,23 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CardCTF from '../components/CardCTF.astro';
 import CardProject from '../components/CardProject.astro';
 import CardBlog from '../components/CardBlog.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { featuredOnly, sortByDateDesc } from '../utils/content';
-import { hasMarkdownContent } from '../utils/contentPresence';
+import { listPosts } from '../lib/db';
+import { getLayoutData } from '../lib/layout-data';
 
-const featuredCtf = sortByDateDesc(await getCollection('ctf', featuredOnly)).slice(0, 3);
-const featuredProjects = hasMarkdownContent('src/content/projects')
-  ? sortByDateDesc(await getCollection('projects', featuredOnly)).slice(0, 3)
-  : [];
-const featuredBlogs = hasMarkdownContent('src/content/blog') ? sortByDateDesc(await getCollection('blog', featuredOnly)).slice(0, 3) : [];
+const { env, profile, siteConfig } = await getLayoutData(Astro.locals);
+const [featuredCtf, featuredProjects, featuredBlogs] = await Promise.all([
+  listPosts(env.DB, { type: 'ctf', featuredOnly: true, limit: 3 }),
+  listPosts(env.DB, { type: 'project', featuredOnly: true, limit: 3 }),
+  listPosts(env.DB, { type: 'blog', featuredOnly: true, limit: 3 }),
+]);
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <Hero />
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION} profile={profile} siteConfig={siteConfig}>
+  <Hero profile={profile} siteConfig={siteConfig} />
 
   <section class="section">
     <div class="section-head">
@@ -29,7 +29,7 @@ const featuredBlogs = hasMarkdownContent('src/content/blog') ? sortByDateDesc(aw
     </div>
     {featuredCtf.length > 0 ? (
       <div class="grid cols-3">
-        {featuredCtf.map((item) => <CardCTF item={item} />)}
+        {featuredCtf.map((item) => <CardCTF item={item} siteConfig={siteConfig} />)}
       </div>
     ) : (
       <p class="empty-state glass-panel">Chưa có writeup nổi bật. Thêm bài trong `src/content/ctf` để hiển thị.</p>
@@ -46,7 +46,7 @@ const featuredBlogs = hasMarkdownContent('src/content/blog') ? sortByDateDesc(aw
     </div>
     {featuredProjects.length > 0 ? (
       <div class="grid cols-2">
-        {featuredProjects.map((item) => <CardProject item={item} />)}
+        {featuredProjects.map((item) => <CardProject item={item} siteConfig={siteConfig} />)}
       </div>
     ) : (
       <p class="empty-state glass-panel">Hiện chưa có project public.</p>
@@ -63,7 +63,7 @@ const featuredBlogs = hasMarkdownContent('src/content/blog') ? sortByDateDesc(aw
     </div>
     {featuredBlogs.length > 0 ? (
       <div class="grid cols-2">
-        {featuredBlogs.map((item) => <CardBlog item={item} />)}
+        {featuredBlogs.map((item) => <CardBlog item={item} siteConfig={siteConfig} />)}
       </div>
     ) : (
       <p class="empty-state glass-panel">Hiện chưa có bài blog public.</p>

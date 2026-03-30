@@ -1,0 +1,151 @@
+---
+---
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login</title>
+    <style>
+      :root {
+        --bg: #f3f7ff;
+        --surface: rgba(255, 255, 255, 0.92);
+        --text: #1f2a44;
+        --muted: #5f6f90;
+        --accent: #285fe9;
+        --border: rgba(74, 121, 218, 0.26);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 6% 12%, rgba(255, 189, 218, 0.32), transparent 36%),
+          radial-gradient(circle at 90% 0, rgba(151, 216, 255, 0.34), transparent 38%),
+          linear-gradient(160deg, #fffaf4 0%, var(--bg) 72%, #edf4ff 100%);
+      }
+
+      .login-card {
+        width: min(92vw, 420px);
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 18px 46px rgba(43, 69, 128, 0.17);
+        padding: 1.4rem;
+      }
+
+      h1 {
+        margin: 0 0 0.35rem;
+        font-size: 1.65rem;
+      }
+
+      p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+      }
+
+      label {
+        display: grid;
+        gap: 0.35rem;
+        margin-bottom: 0.8rem;
+        font-size: 0.92rem;
+        color: var(--muted);
+      }
+
+      input {
+        width: 100%;
+        border: 1px solid rgba(95, 137, 218, 0.34);
+        border-radius: 12px;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.95rem;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 0.4rem;
+        border: 1px solid rgba(60, 107, 206, 0.4);
+        border-radius: 999px;
+        padding: 0.62rem 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: rgba(215, 229, 255, 0.8);
+        color: #1a3f86;
+      }
+
+      button:hover {
+        background: rgba(198, 219, 255, 0.95);
+      }
+
+      .error {
+        min-height: 1.2rem;
+        margin-top: 0.7rem;
+        color: #b51d46;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="login-card">
+      <h1>Admin Login</h1>
+      <p>Đăng nhập để quản lý profile, link và toàn bộ bài viết.</p>
+      <form id="login-form">
+        <label>
+          Username
+          <input id="username" name="username" autocomplete="username" required />
+        </label>
+        <label>
+          Password
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+        </label>
+        <button type="submit">Đăng nhập</button>
+      </form>
+      <div id="error" class="error"></div>
+    </main>
+
+    <script is:inline>
+      (() => {
+        const form = document.getElementById('login-form');
+        const errorEl = document.getElementById('error');
+        if (!form || !errorEl) return;
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          errorEl.textContent = '';
+
+          const username = document.getElementById('username')?.value?.trim() ?? '';
+          const password = document.getElementById('password')?.value ?? '';
+          if (!username || !password) {
+            errorEl.textContent = 'Vui lòng nhập đầy đủ thông tin.';
+            return;
+          }
+
+          try {
+            const response = await fetch('/api/admin/auth/login', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({ username, password }),
+            });
+            const payload = await response.json();
+            if (!response.ok) {
+              errorEl.textContent = payload?.error ?? 'Đăng nhập thất bại.';
+              return;
+            }
+            window.location.href = '/admin';
+          } catch (error) {
+            errorEl.textContent = 'Không thể kết nối tới server admin.';
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

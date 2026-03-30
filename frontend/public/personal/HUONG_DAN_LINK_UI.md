@@ -1,47 +1,20 @@
-# Huong Dan Nhanh: Link + Giao Dien
+# Huong Dan Nhanh: Admin CMS
 
-## 1) Chinh link va thong so giao dien tai 1 cho
+Tu ban nay tro di, ban khong can sua file tay de cap nhat link/profile/noi dung.
 
-File trung tam:
+## 1) Dang nhap admin
 
-- `public/personal/site-config.json`
+- URL: `/admin/login`
+- Sau khi login, vao dashboard: `/admin`
 
-Ban co the sua:
+## 2) Noi dung co the quan ly tren UI
 
-- `links.heroPrimary`: link nut `Xem CTF Writeup`
-- `links.heroSecondary`: link nut `Kham pha Project`
-- `links.heroContact`: link nut lien he nhanh (thuong la `mailto:...`)
-- `links.writeupRepoRoot`: link repo tong chua writeup
-- `ui.enable3dEffects`: `true/false` bat tat hieu ung 3D
-- `ui.heroTiltMax`, `ui.cardTiltMax`, `ui.infoTiltMax`: do nghieng 3D
+- Profile: thong tin ca nhan, about, stack, goals, resume URL
+- Site Config: hero links + thong so UI/3D
+- Posts: CRUD CTF/Project/Blog, slug, draft/publish, featured, markdown body
 
-## 2) Gan link writeup
+## 3) Vai tro cua file trong `public/personal`
 
-Moi bai CTF nam trong:
+`profile.json` va `site-config.json` duoc giu lai chu yeu de lam nguon seed/migration ban dau vao D1.
 
-- `src/content/ctf/*.md`
-
-Gan link ra repo bang field:
-
-```md
-externalUrl: "https://github.com/<username>/<repo>/blob/main/path/to/writeup.md"
-```
-
-Neu co `externalUrl`, card CTF se mo link ngoai.
-Neu khong co, card CTF mo trang chi tiet local.
-
-## 3) Chinh thong tin ca nhan
-
-File:
-
-- `public/personal/profile.json`
-
-## 4) Upload file public
-
-Thu muc:
-
-- `public/personal/uploads/`
-
-Vi du:
-
-- `public/personal/uploads/resume.pdf` -> truy cap qua `/personal/uploads/resume.pdf`
+Public site runtime hien tai doc du lieu truc tiep tu Cloudflare D1.

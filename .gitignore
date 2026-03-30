@@ -39,3 +39,4 @@ venv/
 .cache/
 tmp/
 temp/
+.wrangler/

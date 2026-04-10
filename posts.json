@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Field Notes on Stream Ciphers",
+    "date": "2026-04-05",
+    "tags": [
+      "CRYPTO"
+    ],
+    "type": "blog",
+    "description": "What changed in my cryptography practice after recent challenge sets.",
+    "url": "posts/102-stream-cipher-notes.md"
+  },
+  {
+    "title": "Designing CTF Challenges That Teach",
+    "date": "2026-03-30",
+    "tags": [
+      "MISC"
+    ],
+    "type": "blog",
+    "description": "Balancing puzzle creativity with real-world exploitation habits.",
+    "url": "posts/101-ctf-design.md"
+  },
+  {
+    "title": "Writeup Tier 2 Hack The Box",
+    "date": "2026-03-01",
+    "tags": [
+      "HTB"
+    ],
+    "type": "writeup",
+    "description": "Full tier 2 Hack The Box writeup collection.",
+    "url": "https://github.com/TrangTuanAnh/Writeup_tier2_hackthebox"
+  },
+  {
+    "title": "Write-up PicoCTF (Web)",
+    "date": "2026-02-01",
+    "tags": [
+      "WEB"
+    ],
+    "type": "writeup",
+    "description": "Write up PicoCTF về web.",
+    "url": "https://github.com/TrangTuanAnh/Write-up-PicoCTF"
+  },
+  {
+    "title": "Crypto FreshMan 2025 UIT",
+    "date": "2025-12-01",
+    "tags": [
+      "CRYPTO"
+    ],
+    "type": "writeup",
+    "description": "Các challenge về crypto của chương trình freshman UIT 2025.",
+    "url": "https://github.com/TrangTuanAnh/Crypto-FreshMan2025-UIT"
+  }
+]

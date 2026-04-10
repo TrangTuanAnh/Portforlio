@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cyber Operator Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050a0e;--bg2:#0a1218;--c:#00f5c4;--cyan:#00f5c4;--p:#7928ca;--t:#c9d1d9;--m:#8b949e;--ln:rgba(0,245,196,.14);--g:rgba(255,255,255,.04)}
+*{box-sizing:border-box;margin:0;padding:0;scrollbar-width:thin;scrollbar-color:rgba(0,245,196,.8) #071016}
+*::-webkit-scrollbar{width:7px;height:7px}*::-webkit-scrollbar-track{background:#071016}*::-webkit-scrollbar-thumb{background:rgba(0,245,196,.8);border-radius:999px}
+html{scroll-behavior:smooth}
+body{font-family:"JetBrains Mono",monospace;background:var(--bg);color:var(--t);min-height:100vh;line-height:1.6;overflow-x:hidden;position:relative}
+.about-bio,.hero-desc,.post-desc,.contact-text,.cert-issuer{font-family:"IBM Plex Sans",sans-serif;line-height:1.9}
+.about-bio,.hero-desc,.contact-text{font-weight:400}
+.post-desc,.cert-issuer{font-weight:300}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 10%,rgba(0,245,196,.14),transparent 40%),radial-gradient(circle at 88% 8%,rgba(121,40,202,.19),transparent 34%),linear-gradient(180deg,rgba(5,10,14,.36),rgba(5,10,14,.95) 72%,rgba(5,10,14,1))}
+#tsparticles{position:fixed;inset:0;z-index:-2}
+.container{width:min(1100px,92vw);margin:0 auto}
+.nav{position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(201,209,217,.13);background:rgba(5,10,14,.65);backdrop-filter:blur(14px)}
+.navin{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:relative}
+.logo{text-decoration:none;color:var(--t);border:1px solid rgba(0,245,196,.32);background:rgba(0,245,196,.08);border-radius:999px;padding:.38rem .68rem;font-weight:700;box-shadow:0 0 16px rgba(0,245,196,.12)}
+.logo .lgp{color:var(--c)}
+#nt{display:none}.nlb{display:none;width:44px;height:44px;border:1px solid rgba(0,245,196,.26);border-radius:10px;align-items:center;justify-content:center;cursor:pointer}
+.nlb span,.nlb span:before,.nlb span:after{display:block;width:20px;height:2px;background:var(--c);position:relative;transition:transform .2s ease}
+.nlb span:before,.nlb span:after{content:"";position:absolute;left:0}.nlb span:before{top:-6px}.nlb span:after{top:6px}
+.links{list-style:none;display:flex;align-items:center;gap:1.3rem}
+.links a{text-decoration:none;color:var(--t);font-size:.95rem;position:relative;display:inline-block;padding:.25rem 0;transition:color .25s ease}
+.links a:after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:2px;background:var(--c);transform:scaleX(0);transform-origin:right;transition:transform .28s ease}
+.links a:hover,.links a.active{color:var(--c)}.links a:hover:after,.links a.active:after{transform:scaleX(1);transform-origin:left}
+.hero{min-height:100vh;display:grid;align-items:center;position:relative;overflow:hidden;isolation:isolate;padding:2.2rem 0}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.03;background-image:linear-gradient(rgba(0,245,196,1) 1px,transparent 1px),linear-gradient(90deg,rgba(121,40,202,1) 1px,transparent 1px);background-size:46px 46px;animation:grid 18s linear infinite}
+@keyframes grid{0%{transform:translateY(0)}100%{transform:translateY(46px)}}
+.hp{border:1px solid rgba(201,209,217,.17);border-radius:18px;background:rgba(10,18,24,.56);backdrop-filter:blur(12px);box-shadow:0 15px 36px rgba(0,0,0,.34);padding:clamp(1.2rem,2.2vw,2rem);max-width:900px}
+.hk{display:inline-flex;align-items:center;border-radius:999px;border:1px solid rgba(121,40,202,.42);background:rgba(121,40,202,.2);color:#d9bcff;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;padding:.28rem .72rem}
+.term{margin-top:1rem;border-radius:14px;border:1px solid rgba(0,245,196,.28);background:rgba(2,8,11,.88);box-shadow:inset 0 0 0 1px rgba(0,245,196,.08),0 0 20px rgba(0,245,196,.09);padding:1rem}
+.tl{min-height:1.62em;color:#d2f6ef;font-size:clamp(.9rem,1.7vw,1.12rem);word-break:break-word}
+.cur{display:inline-block;width:.7ch;color:var(--c);margin-left:.08rem;animation:bl 1s step-start infinite}
+@keyframes bl{0%,48%{opacity:1}49%,100%{opacity:0}}
+.gl{position:relative;display:inline-block;color:#f7fdff}.gl:before,.gl:after{content:attr(data-text);position:absolute;left:0;top:0;opacity:0;pointer-events:none}
+.gl.g:before{opacity:.85;color:var(--c);animation:gt .38s steps(2,end) 1}.gl.g:after{opacity:.65;color:#c591ff;animation:gb .38s steps(2,end) 1}
+@keyframes gt{0%{clip-path:inset(0 0 82% 0);transform:translate(0,0)}35%{clip-path:inset(0 0 52% 0);transform:translate(-2px,-1px)}70%{clip-path:inset(0 0 70% 0);transform:translate(2px,1px)}100%{clip-path:inset(0 0 84% 0);transform:translate(0,0)}}
+@keyframes gb{0%{clip-path:inset(72% 0 0 0);transform:translate(0,0)}35%{clip-path:inset(52% 0 0 0);transform:translate(2px,1px)}70%{clip-path:inset(66% 0 0 0);transform:translate(-2px,-1px)}100%{clip-path:inset(78% 0 0 0);transform:translate(0,0)}}
+.hb{margin-top:1.1rem;display:flex;flex-wrap:wrap;gap:.8rem}
+.tpm{color:#90b6a7;font-size:.82rem;letter-spacing:.02em;margin-bottom:.35rem}
+.hd{margin-top:.95rem;color:#a7b4bf;max-width:72ch}
+.hs{margin-top:1rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7rem}
+.hi{border:1px solid rgba(0,245,196,.22);border-radius:10px;background:rgba(0,245,196,.06);padding:.62rem .7rem}
+.hv{display:block;color:#f5fdff;font-size:1.02rem;line-height:1.2}
+.hl{display:block;margin-top:.2rem;color:#8fa4b2;font-size:.72rem}
+.btn{text-decoration:none;border-radius:10px;border:1px solid;padding:.7rem 1.1rem;font-weight:700;transition:transform .2s ease,box-shadow .24s ease,background-color .24s ease,color .24s ease}.btn:hover{transform:translateY(-2px)}
+.btn.c{border-color:var(--c);color:var(--c);background:transparent}.btn.c:hover{background:var(--c);color:#000;box-shadow:0 0 24px rgba(0,245,196,.33)}
+.btn.p{border-color:var(--p);color:#cfb3ef;background:transparent}.btn.p:hover{background:var(--p);color:#f6f0ff;box-shadow:0 0 24px rgba(121,40,202,.34)}
+.sec{scroll-margin-top:95px;margin:1.4rem auto 2rem;border-radius:16px;border:1px solid var(--ln);background:var(--g);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.3);padding:1.9rem}
+.st{color:var(--c);font-size:clamp(1.1rem,2vw,1.35rem);margin-bottom:.95rem}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .62s ease,transform .62s ease}.rv.v{opacity:1;transform:translateY(0)}
+.ag{display:grid;grid-template-columns:1fr;gap:1rem;align-items:start}
+.aw{width:220px;height:220px;margin:0 auto;border-radius:50%;position:relative;display:grid;place-items:center}
+.aw:before{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--c),var(--p),var(--c));animation:rot 7s linear infinite}
+.aw:after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--bg)}
+.ac{position:relative;z-index:1;width:200px;height:200px;border-radius:50%;border:1px solid rgba(201,209,217,.2);display:grid;place-items:center;text-align:center;font-size:.8rem;color:#9adbd0;background:rgba(255,255,255,.03);padding:.8rem}
+@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.ab p{color:var(--t);max-width:68ch}.sk{margin-top:1rem}.sl{color:#f0f7ff;margin-bottom:.45rem;font-size:.95rem}.sg{display:flex;flex-wrap:wrap;gap:.55rem}
+.tag{border:1px solid rgba(0,245,196,.65);border-radius:999px;padding:.25rem .62rem;color:var(--c);background:transparent;font-size:.78rem;transition:box-shadow .2s ease,transform .2s ease}.tag:hover{box-shadow:0 0 17px rgba(0,245,196,.23);transform:translateY(-1px)}
+.cs{margin-top:.9rem;color:var(--cyan);font-size:.84rem}
+.as{margin-top:1rem;color:#99a4ad;font-size:.92rem}.as .n{color:var(--c);font-weight:700}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-top:.8rem}
+.cc{background:rgba(255,255,255,.04);border:1px solid rgba(0,245,196,.2);backdrop-filter:blur(10px);border-radius:12px;padding:24px;transition:transform .25s ease,box-shadow .25s ease}.cc:hover{transform:translateY(-4px);box-shadow:0 0 24px rgba(0,245,196,.15)}
+.ci{width:48px;height:48px;border:1px solid rgba(0,245,196,.74);border-radius:10px;color:var(--c);display:grid;place-items:center;margin-bottom:.78rem;font-weight:700}
+.cn{color:#fff;font-weight:700;margin-bottom:.22rem;font-size:1rem}.iss{color:var(--m);font-size:.9rem;margin-bottom:.24rem}.det{color:#9fb0bb;font-size:.86rem;margin-bottom:.28rem}.dt{color:var(--c);font-size:.78rem;margin-bottom:.5rem}
+.cl{color:var(--c);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s ease;font-size:.9rem}.cl:hover{border-color:var(--c)}
+.pg{display:grid;gap:1rem;margin-top:.8rem}
+.pc{position:relative;background:rgba(255,255,255,.04);border:1px solid rgba(0,245,196,.2);backdrop-filter:blur(10px);border-radius:12px;padding:1rem 1rem 1rem 1.2rem;transition:transform .25s ease,box-shadow .25s ease}
+.pc:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;background:linear-gradient(180deg,var(--c),var(--p));border-radius:999px}
+.pc:hover{transform:translateY(-4px);box-shadow:0 0 24px rgba(0,245,196,.15)}
+.ph{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.45rem;margin-bottom:.35rem}
+.pti{color:#fff;font-weight:700;font-size:1.02rem}
+.pmeta{color:var(--m);font-size:.84rem}
+.pbl{margin:.4rem 0 .55rem 1rem;color:#a8b7c2;font-size:.9rem;display:grid;gap:.25rem}
+.pstack{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.2rem}
+.plinkrow{margin-top:.65rem}
+.pnolink{color:#7f8d98;font-size:.85rem}
+.tabs{display:flex;gap:1rem;margin-bottom:1rem}.tb{border:none;background:transparent;color:#9ca7b0;font:inherit;padding:.25rem 0;cursor:pointer;position:relative}
+.tb:after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:2px;background:var(--c);transform:scaleX(0);transform-origin:right;transition:transform .22s ease}.tb.active{color:#fff}.tb.active:after{transform:scaleX(1);transform-origin:left}
+.tp{opacity:0;transform:translateY(10px);pointer-events:none;max-height:0;overflow:hidden;transition:opacity .28s ease,transform .28s ease}.tp.active{opacity:1;transform:translateY(0);pointer-events:auto;max-height:4000px;overflow:visible}
+.pl{display:grid;gap:.75rem}
+.pr{display:grid;grid-template-columns:auto 1fr auto;gap:.9rem;align-items:center;border-radius:12px;border:1px solid rgba(201,209,217,.14);background:rgba(9,16,22,.58);padding:.85rem .9rem;position:relative;transition:box-shadow .2s ease,border-color .2s ease}
+.pr:after{content:"";position:absolute;left:.9rem;right:.9rem;bottom:0;height:1px;background:rgba(0,245,196,.1);pointer-events:none}
+.pr:hover{border-color:rgba(0,245,196,.28);box-shadow:0 0 20px rgba(0,245,196,.11)}
+.pt{border:1px solid rgba(0,245,196,.68);color:var(--c);border-radius:999px;font-size:.74rem;padding:.2rem .6rem;white-space:nowrap;align-self:start}
+.pm h3{color:#f5fbff;font-size:.98rem;margin-bottom:.22rem;transition:color .2s ease}.pr:hover .pm h3{color:var(--c)}.pm p{color:#8f9ba5;font-size:.89rem;margin-bottom:.2rem}.pm small{color:var(--c);font-size:.74rem}
+.rd{color:var(--c);text-decoration:none;white-space:nowrap;border-bottom:1px solid transparent;transition:border-color .2s ease}.rd:hover{border-color:var(--c)}.emp{color:#8f9aa3;font-size:.9rem;padding:.6rem 0}
+.con{background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.04),transparent 40%),radial-gradient(circle at 80% 10%,rgba(121,40,202,.14),transparent 30%),linear-gradient(180deg,rgba(14,23,31,.9),rgba(9,15,21,.9));border-color:rgba(0,245,196,.2);position:relative;overflow:hidden}
+.con:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.35) 100%);z-index:0}
+.cgrid{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:1rem;align-items:start}.ctxt{color:#c5d0d8;max-width:58ch;margin-bottom:.9rem}
+.slist{display:grid;gap:.55rem}
+.srow{display:flex;gap:.65rem;align-items:flex-start;padding:.5rem .6rem;border-radius:9px;border:1px solid rgba(0,245,196,.2);background:rgba(0,245,196,.05)}
+.slabel{color:var(--c);font-size:.84rem;min-width:74px}
+.sval{color:#dce8f1;font-size:.86rem;word-break:break-word}
+.sval a{color:#dce8f1;text-decoration:none;border-bottom:1px solid rgba(0,245,196,.35)}
+.sval a:hover{border-bottom-color:var(--c)}
+.so{display:flex;gap:.65rem}.sb{width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid rgba(0,245,196,.42);color:var(--c);text-decoration:none;background:rgba(0,245,196,.06);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.sb svg{width:20px;height:20px;fill:currentColor}.sb:hover{transform:translateY(-2px);border-color:var(--c);box-shadow:0 0 20px rgba(0,245,196,.24)}
+.tf{border-radius:12px;border:1px solid rgba(0,245,196,.2);background:rgba(4,10,14,.78);padding:1rem}.f{margin-bottom:.9rem}.f label{display:block;color:var(--c);font-size:.86rem;margin-bottom:.3rem}
+.f input,.f textarea{width:100%;border:none;border-bottom:1px solid rgba(0,245,196,.66);background:transparent;color:#fff;font:inherit;padding:.4rem .1rem;outline:none;resize:vertical;min-height:40px}.f textarea{min-height:92px}
+.f input:focus,.f textarea:focus{border-bottom-color:var(--c);box-shadow:0 4px 10px -6px rgba(0,245,196,.72)}
+.sub{width:100%;border:none;border-radius:8px;background:var(--c);color:#000;font:inherit;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.68rem .8rem;cursor:pointer;transition:background-color .24s ease,color .24s ease}.sub:hover{background:var(--p);color:#f3e9ff}
+.fs{margin-top:.7rem;color:var(--c);font-size:.86rem;min-height:1.4em}.ft{text-align:center;color:#6f7a84;font-size:.8rem;padding:1.4rem 0 2rem}
+@media(max-width:900px){.cgrid{grid-template-columns:1fr}.ag{grid-template-columns:1fr;text-align:left}}
+@media(max-width:860px){.nlb{display:inline-flex}.links{position:absolute;top:calc(100% + 1px);left:0;right:0;display:grid;gap:0;max-height:0;overflow:hidden;background:rgba(5,10,14,.94);border-bottom:1px solid rgba(201,209,217,.14);transition:max-height .3s ease}.links li{width:min(1100px,92vw);margin:0 auto}.links a{display:block;padding:.8rem 0}#nt:checked ~ .links{max-height:400px}#nt:checked + .nlb span{transform:rotate(45deg)}#nt:checked + .nlb span:before{transform:rotate(90deg);top:0}#nt:checked + .nlb span:after{transform:rotate(90deg);top:0}.hero{padding:1.2rem 0}.tl{font-size:.9rem}.hs{grid-template-columns:repeat(2,minmax(0,1fr))}.sec{padding:1.35rem}.pr{grid-template-columns:1fr;gap:.45rem}.rd{justify-self:start}}
+@media(max-width:620px){.cg{grid-template-columns:1fr}.hb{width:100%}.btn{width:100%;text-align:center}}
+</style>
+</head>
+<body>
+<div id="tsparticles" aria-hidden="true"></div>
+<header class="nav"><nav class="container navin"><a class="logo" href="#home"><span class="lgp">&gt;</span> user@portfolio</a><input id="nt" type="checkbox" aria-label="Toggle navigation"><label class="nlb" for="nt"><span></span></label><ul class="links"><li><a href="#about">About</a></li><li><a href="#certs">Certs</a></li><li><a href="#writeups" data-tab-target="writeup">WriteUps</a></li><li><a href="#writeups" data-tab-target="blog">Blog</a></li><li><a href="#contact">Contact</a></li></ul></nav></header>
+<main>
+<section id="home" class="hero"><div class="container"><div class="hp rv"><span class="hk">Cyber Operator</span><div class="term"><p class="tpm">root@UIT-SecLab:~#</p><p class="tl" id="l1"></p><p class="tl" id="l2"></p><p class="tl"><span id="l3"></span><span class="cur">_</span></p></div><p class="hd hero-desc">Honors student @ UIT — GPA 8.92. Building IDS systems by day, breaking web apps by night. TryHackMe Top 15% globally.</p><div class="hs"><div class="hi"><strong class="hv">8.92</strong><span class="hl">GPA / 10</span></div><div class="hi"><strong class="hv">Top 15%</strong><span class="hl">TryHackMe Rank</span></div><div class="hi"><strong class="hv">20+</strong><span class="hl">PortSwigger Labs</span></div><div class="hi"><strong class="hv">46</strong><span class="hl">THM Rooms Done</span></div></div><div class="hb"><a class="btn c" href="#writeups" data-tab-target="writeup">$ ./view_writeups</a><a class="btn p" href="#contact">$ ./contact_me</a></div></div></div></section>
+<section id="about" class="sec container"><h2 class="st rv">// about_me</h2><div class="ag"><div class="ab rv"><p class="about-bio">Sinh viên năm 2 ngành An toàn thông tin hệ Cử nhân Tài năng tại UIT-VNU HCM (GPA 8.92).</p><p class="about-bio">Tôi đang tập trung vào: Web Application Security, Network Penetration Testing, và nghiên cứu DNS Cache Poisoning. Mục tiêu gần nhất: Red Team Internship.</p><div class="sk"><p class="sl">Skills</p><div class="sg"><span class="tag">[burp-suite]</span><span class="tag">[nmap]</span><span class="tag">[metasploit]</span><span class="tag">[wireshark]</span><span class="tag">[gobuster]</span><span class="tag">[python]</span><span class="tag">[bash]</span><span class="tag">[linux]</span><span class="tag">[docker]</span><span class="tag">[fastapi]</span><span class="tag">[owasp-top-10]</span><span class="tag">[web-security]</span><span class="tag">[network-sec]</span><span class="tag">[cryptography]</span><span class="tag">[machine-learning]</span><span class="tag">[git]</span><span class="tag">[mysql]</span></div><p class="cs">&gt; currently: DNS cache poisoning research (USENIX Sec '25)</p></div></div></section>
+<section id="certs" class="sec container"><h2 class="st rv">// certs_&_training</h2><div class="cg"><article class="cc rv"><div class="ci">🔐</div><h3 class="cn">TryHackMe Jr Penetration Tester</h3><p class="iss cert-issuer">TryHackMe</p><p class="det">Top 15% globally • 46 rooms • 7 badges</p><p class="dt">2025 — 2026</p><a class="cl" href="https://drive.google.com/drive/folders/1y6axNoaf7ClpHd9ARvuZX2Jft4CiOkjl">view certificate &rarr;</a></article><article class="cc rv"><div class="ci">🕷</div><h3 class="cn">Web Security Labs (20+ labs)</h3><p class="iss cert-issuer">PortSwigger Academy</p><p class="det">SQLi • XSS • IDOR • Auth flaws • OWASP Top 10</p><p class="dt">2025 — Present</p></article><article class="cc rv"><div class="ci">⚔️</div><h3 class="cn">Hack The Box Starting Point</h3><p class="iss cert-issuer">Hack The Box</p><p class="det">Linux & Windows exploitation, priv-esc, SQLi, IDOR</p><p class="dt">2026</p></article><article class="cc rv"><div class="ci">🏁</div><h3 class="cn">PicoCTF</h3><p class="iss cert-issuer">Carnegie Mellon University</p><p class="det">Web exploitation • Cryptography • Reverse Engineering</p><p class="dt">2026 — Present</p></article></div></section>
+<section id="projects" class="sec container"><h2 class="st rv">// projects</h2><div class="pg"><article class="pc rv"><div class="ph"><h3 class="pti">TLS Anomaly Detection IDS</h3><p class="pmeta">2-member team • 2025</p></div><ul class="pbl"><li>Realtime flow-based IDS/IPS pipeline using NFStream + FastAPI + MySQL + Docker</li><li>Designed backend ingestion and event-query workflows for anomaly monitoring</li><li>Integrated ML detection module developed by teammate</li></ul><div class="pstack"><span class="tag">[python]</span><span class="tag">[fastapi]</span><span class="tag">[mysql]</span><span class="tag">[docker]</span><span class="tag">[nfstream]</span><span class="tag">[machine-learning]</span></div><p class="plinkrow"><a class="cl" href="https://github.com/TrangTuanAnh/tls-anomaly-detection-ids">github &rarr;</a></p></article><article class="pc rv"><div class="ph"><h3 class="pti">Secure LAN File Transfer &amp; Storage System</h3><p class="pmeta">3-member team • 2026 — Present</p></div><ul class="pbl"><li>Chunk-based transfer with resume, role-based room access, metadata coordination</li><li>Security controls: local virus scan, integrity check, encrypted transfer, audit log</li><li>Designed overall architecture: coordinator + storage + client components</li></ul><div class="pstack"><span class="tag">[python]</span><span class="tag">[linux]</span><span class="tag">[encryption]</span><span class="tag">[architecture]</span><span class="tag">[network]</span></div><p class="plinkrow"><span class="pnolink">in progress</span></p></article><article class="pc rv"><div class="ph"><h3 class="pti">DNS Cache Poisoning Research (POPS)</h3><p class="pmeta">2-member team • 2026 — Present</p></div><ul class="pbl"><li>Literature review on DNS cache poisoning variants (USENIX Security '25)</li><li>Building controlled lab with Unbound/BIND for fragmentation-based attack reproduction</li><li>Defining test scenarios for exploitability and defense validation</li></ul><div class="pstack"><span class="tag">[dns]</span><span class="tag">[unbound]</span><span class="tag">[bind]</span><span class="tag">[network-security]</span><span class="tag">[research]</span></div><p class="plinkrow"><a class="cl" href="https://www.usenix.org/conference/usenixsecurity25/presentation/afek">reference paper &rarr;</a></p></article></div></section>
+<section id="writeups" class="sec container"><h2 class="st rv">// posts</h2><div class="tabs rv"><button class="tb active" type="button" data-tab="writeup">WriteUps</button><button class="tb" type="button" data-tab="blog">Blog</button></div><div class="tp active" data-panel="writeup"><div class="pl" id="wlist"></div></div><div class="tp" data-panel="blog"><div class="pl" id="blist"></div></div></section>
+<section id="contact" class="sec container con"><h2 class="st rv">// contact_me</h2><div class="cgrid"><div class="rv"><p class="ctxt contact-text">Tôi đang tìm kiếm cơ hội Red Team Internship hoặc cộng tác nghiên cứu bảo mật. Nếu bạn có project thú vị hoặc muốn trao đổi về security, hãy nhắn cho tôi.</p><div class="slist"><div class="srow"><span class="slabel">Email</span><span class="sval"><a href="mailto:24520131@gm.uit.edu.vn">24520131@gm.uit.edu.vn</a></span></div><div class="srow"><span class="slabel">GitHub</span><span class="sval"><a href="https://github.com/TrangTuanAnh">github.com/TrangTuanAnh</a></span></div><div class="srow"><span class="slabel">LinkedIn</span><span class="sval"><a href="https://www.linkedin.com/in/anh-trang-tu%E1%BA%A5n-40260a394/">linkedin.com/in/anh-trang-tu%E1%BA%A5n-40260a394</a></span></div></div></div></div></section>
+</main>
+<footer class="ft">&gt; &copy; 2026 0xTuanAnh — UIT Information Security</footer>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script>
+const fallback=[{title:"Crypto FreshMan 2025 UIT",description:"Các challenge về crypto của chương trình freshman UIT 2025.",date:"2025-12-01",tags:["CRYPTO"],type:"writeup",url:"https://github.com/TrangTuanAnh/Crypto-FreshMan2025-UIT"},{title:"Writeup Tier 2 Hack The Box",description:"Full tier 2 Hack The Box writeup collection.",date:"2026-03-01",tags:["HTB"],type:"writeup",url:"https://github.com/TrangTuanAnh/Writeup_tier2_hackthebox"},{title:"Write-up PicoCTF (Web)",description:"Write up PicoCTF về web.",date:"2026-02-01",tags:["WEB"],type:"writeup",url:"https://github.com/TrangTuanAnh/Write-up-PicoCTF"}];
+const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("v");ro.unobserve(e.target)}})},{threshold:.14});
+const obs=s=>{(s||document).querySelectorAll(".rv").forEach(n=>ro.observe(n))};
+const wait=m=>new Promise(r=>setTimeout(r,m));const tdel=()=>60+Math.floor(Math.random()*41);
+async function type(el,txt){for(let i=0;i<txt.length;i++){el.textContent+=txt[i];await wait(tdel())}}
+async function hero(){const l1=document.getElementById("l1"),l2=document.getElementById("l2"),l3=document.getElementById("l3");if(!l1||!l2||!l3)return;const roles=["Information Security Student","Penetration Tester","CTF Player — PicoCTF / HTB","Red Team Intern Candidate"];await type(l1,"> whoami");await wait(450);await type(l2,"> 0xTuanAnh");l2.innerHTML=(l2.textContent||"> 0xTuanAnh").replace("0xTuanAnh","<span class=\"gl\" id=\"hn\" data-text=\"0xTuanAnh\">0xTuanAnh</span>");const typeRole=async txt=>{l3.textContent="";await type(l3,txt)};await wait(320);await typeRole(roles[0]);(async()=>{let i=1;while(true){await wait(1900);await typeRole(roles[i]);i=(i+1)%roles.length}})();const n=document.getElementById("hn");if(n){setInterval(()=>{n.classList.add("g");setTimeout(()=>n.classList.remove("g"),420)},5000)}}
+const fdate=d=>{const p=new Date(d);if(Number.isNaN(p.getTime()))return d;return p.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"2-digit"})};
+function mk(post){const r=document.createElement("article");r.className="pr rv";const t=document.createElement("div");t.className="pt";t.textContent="["+String(Array.isArray(post.tags)&&post.tags[0]?post.tags[0]:"MISC").toUpperCase()+"]";const m=document.createElement("div");m.className="pm";const h=document.createElement("h3");h.textContent=post.title||"Untitled Post";const p=document.createElement("p");p.className="post-desc";p.textContent=post.description||"No description provided.";const s=document.createElement("small");s.textContent=fdate(post.date||"");m.append(h,p,s);const a=document.createElement("a");a.className="rd";a.href=post.url||"#";a.textContent="Read →";r.append(t,m,a);return r}
+function render(ps){const wl=document.getElementById("wlist"),bl=document.getElementById("blist");if(!wl||!bl)return;wl.innerHTML="";bl.innerHTML="";const ws=ps.filter(p=>String(p.type||"").toLowerCase()==="writeup");if(!ws.length){const e=document.createElement("p");e.className="emp";e.textContent="No writeups found.";wl.appendChild(e)}else ws.forEach(p=>wl.appendChild(mk(p)));obs(document.getElementById("writeups"))}
+async function loadPosts(){try{const r=await fetch("posts.json",{cache:"no-store"});if(!r.ok)throw new Error("missing");const d=await r.json();if(!Array.isArray(d))throw new Error("bad");render(d)}catch(_){render(fallback)}}
+function setTab(name){document.querySelectorAll(".tb").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));document.querySelectorAll(".tp").forEach(p=>p.classList.toggle("active",p.dataset.panel===name));document.querySelectorAll(".links a[data-tab-target]").forEach(a=>a.classList.toggle("active",a.dataset.tabTarget===name))}
+function tabsNav(){document.querySelectorAll(".tb").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));const nt=document.getElementById("nt");document.querySelectorAll(".links a").forEach(a=>a.addEventListener("click",()=>{if(a.dataset.tabTarget)setTab(a.dataset.tabTarget);if(nt)nt.checked=false}));const hb=document.querySelector(".hb a[data-tab-target]");if(hb)hb.addEventListener("click",()=>setTab("writeup"))}
+
+function parts(){if(!window.tsParticles)return;tsParticles.load("tsparticles",{fullScreen:{enable:false},background:{color:"transparent"},fpsLimit:60,interactivity:{events:{onHover:{enable:true,mode:"repulse"},resize:true},modes:{repulse:{distance:120,duration:.4}}},particles:{color:{value:["#ffffff","#00f5c4"]},links:{color:"#66ffe5",distance:130,enable:true,opacity:.26,width:1},move:{direction:"none",enable:true,outModes:{default:"out"},speed:.6},number:{density:{enable:true,area:900},value:80},opacity:{value:{min:.18,max:.6}},shape:{type:"circle"},size:{value:{min:1,max:3}}},detectRetina:true})}
+document.addEventListener("DOMContentLoaded",()=>{obs(document);hero();tabsNav();loadPosts()});window.addEventListener("load",()=>{parts()});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 [
   {
-    "title": "Race condition trên filesystem — không chỉ là memory",
+    "title": "Race condition trên filesystem",
     "date": "2026-04-27",
     "tags": [
       "CONCURRENCY",
@@ -8,11 +8,11 @@
       "SECURITY"
     ],
     "type": "blog",
-    "description": "Race condition không chỉ xảy ra giữa thread cùng process. Worker pool web app + filesystem chia sẻ là chỗ race kinh điển — và cách phòng tránh bằng O_TMPFILE, atomic rename, file lock.",
+    "description": "Race không chỉ ở memory. Worker pool web app + filesystem chia sẻ là chỗ race kinh điển. Pattern thường gặp + fix bằng O_TMPFILE / atomic rename / flock.",
     "url": "posts/105-filesystem-race-condition.md"
   },
   {
-    "title": "LLM dưới góc security — vì sao prompt injection không fix triệt để được",
+    "title": "Prompt injection — góc nhìn LLM internals",
     "date": "2026-04-27",
     "tags": [
       "LLM",
@@ -20,11 +20,11 @@
       "SECURITY"
     ],
     "type": "blog",
-    "description": "LLM thực ra chỉ là next-token predictor. System prompt với user prompt cùng là tokens — không có boundary thật. Đó là lý do prompt injection là vấn đề kiến trúc, không phải bug để fix.",
+    "description": "LLM = next-token predictor. System prompt với user prompt cùng là tokens, không có boundary cứng. Nên prompt injection là vấn đề kiến trúc, không phải bug để fix.",
     "url": "posts/106-llm-prompt-injection-internals.md"
   },
   {
-    "title": "Git index v4 path compression — bytes ngầm bypass scanner",
+    "title": "Git index v4 path compression",
     "date": "2026-04-26",
     "tags": [
       "GIT",
@@ -32,7 +32,7 @@
       "SECURITY"
     ],
     "type": "blog",
-    "description": "Khám phá .git/index — file nội bộ quan trọng nhất của Git — và cơ chế nén path ở version 4 vô tình tạo blind spot cho scanner kiểu grep.",
+    "description": "Cấu trúc .git/index, vì sao v4 nén path, và mặt phụ — bytes thực không trùng với path logic, phá `grep` scanner.",
     "url": "posts/104-git-index-v4-path-compression.md"
   },
   {
@@ -47,7 +47,7 @@
     "url": "https://github.com/TrangTuanAnh/B01lers-CTF-2026"
   },
   {
-    "title": "NaN — kẻ phá hoại các check số học trong Python",
+    "title": "NaN bypass check số trong Python",
     "date": "2026-04-25",
     "tags": [
       "PYTHON",
@@ -55,7 +55,7 @@
       "SECURITY"
     ],
     "type": "blog",
-    "description": "Tại sao mọi so sánh với NaN đều ra False, NaN nuốt mọi phép toán, và những dòng code tưởng chừng an toàn nhưng nát bét khi gặp NaN.",
+    "description": "NaN làm sập mọi so sánh trả False, NaN nuốt mọi phép toán. Dòng `if x <= 0` trông an toàn nhưng lủng khi `x = NaN`.",
     "url": "posts/103-nan-bypass-python-checks.md"
   },
   {

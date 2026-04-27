@@ -998,10 +998,14 @@ body.modal-open{overflow:hidden}
 <script>
 /* ============== FALLBACK POSTS ============== */
 const fallback=[
+  {title:"Race condition trên filesystem — không chỉ là memory",description:"Race không chỉ ở memory. Worker pool + filesystem chia sẻ là chỗ race kinh điển — và cách phòng tránh bằng O_TMPFILE, atomic rename, file lock.",date:"2026-04-27",tags:["CONCURRENCY","LINUX","SECURITY"],type:"blog",url:"posts/105-filesystem-race-condition.md"},
+  {title:"LLM dưới góc security — vì sao prompt injection không fix triệt để được",description:"LLM thực ra chỉ là next-token predictor. System prompt với user prompt cùng là tokens — không có boundary thật.",date:"2026-04-27",tags:["LLM","AI","SECURITY"],type:"blog",url:"posts/106-llm-prompt-injection-internals.md"},
+  {title:"Git index v4 path compression — bytes ngầm bypass scanner",date:"2026-04-26",description:"Khám phá .git/index — file nội bộ Git — và cơ chế nén path ở v4 vô tình tạo blind spot cho scanner kiểu grep.",tags:["GIT","INTERNALS","SECURITY"],type:"blog",url:"posts/104-git-index-v4-path-compression.md"},
   {title:"Write-up B01lers CTF 2026 (Web)",description:"Top 11 thế giới với team UIT-creampie. Write-up 2 bài web: egg (forge cookie + race) và clankers-market (.git/index v4 path compression).",date:"2026-04-26",tags:["WEB","CTF"],type:"writeup",url:"https://github.com/TrangTuanAnh/B01lers-CTF-2026"},
-  {title:"Crypto FreshMan 2025 UIT",description:"Các challenge về crypto của chương trình freshman UIT 2025.",date:"2025-12-01",tags:["CRYPTO"],type:"writeup",url:"https://github.com/TrangTuanAnh/Crypto-FreshMan2025-UIT"},
+  {title:"NaN — kẻ phá hoại các check số học trong Python",description:"Tại sao mọi so sánh với NaN đều ra False, NaN nuốt mọi phép toán, và những dòng code tưởng chừng an toàn nhưng nát bét khi gặp NaN.",date:"2026-04-25",tags:["PYTHON","IEEE754","SECURITY"],type:"blog",url:"posts/103-nan-bypass-python-checks.md"},
   {title:"Writeup Tier 2 Hack The Box",description:"Full tier 2 Hack The Box writeup collection.",date:"2026-03-01",tags:["HTB"],type:"writeup",url:"https://github.com/TrangTuanAnh/Writeup_tier2_hackthebox"},
-  {title:"Write-up PicoCTF (Web)",description:"Write up PicoCTF về web.",date:"2026-02-01",tags:["WEB"],type:"writeup",url:"https://github.com/TrangTuanAnh/Write-up-PicoCTF"}
+  {title:"Write-up PicoCTF (Web)",description:"Write up PicoCTF về web.",date:"2026-02-01",tags:["WEB"],type:"writeup",url:"https://github.com/TrangTuanAnh/Write-up-PicoCTF"},
+  {title:"Crypto FreshMan 2025 UIT",description:"Các challenge về crypto của chương trình freshman UIT 2025.",date:"2025-12-01",tags:["CRYPTO"],type:"writeup",url:"https://github.com/TrangTuanAnh/Crypto-FreshMan2025-UIT"}
 ];
 
 /* ============== REVEAL OBSERVER ============== */
@@ -1294,17 +1298,75 @@ function finishLoad(ctx,markdown){
   rdrBody.scrollTop=0;
 }
 
-function openReader(url,title){
-  const parsed=parseGhUrl(url);
-  if(!parsed){
-    // fallback: just open in new tab
-    window.open(url,"_blank","noopener");
-    return;
+async function openLocalDoc(url){
+  rdrCtx={kind:"local",url,history:[]};
+  rdrBody.classList.add("loading");
+  rdrBody.innerHTML="";
+  rdrTtl.textContent=url;
+  // breadcrumb for local
+  rdrCrumb.innerHTML="";
+  const seg=document.createElement("span");seg.className="seg";seg.textContent="local";
+  const sep=document.createElement("span");sep.className="sep";sep.textContent=" / ";
+  const file=document.createElement("span");file.className="seg";file.textContent=url.split("/").pop();
+  rdrCrumb.append(seg,sep,file);
+  try{
+    const r=await fetch(url,{cache:"no-store"});
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    let md=await r.text();
+    // strip YAML frontmatter
+    md=md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/,"");
+    if(window.marked){
+      marked.setOptions({
+        breaks:false,gfm:true,
+        highlight:(code,lang)=>{
+          if(window.hljs){
+            try{return lang&&hljs.getLanguage(lang)?hljs.highlight(code,{language:lang}).value:hljs.highlightAuto(code).value}
+            catch(_){return code}
+          }
+          return code;
+        }
+      });
+    }
+    const html=window.marked?marked.parse(md):md.replace(/</g,"&lt;");
+    const wrap=document.createElement("div");
+    wrap.innerHTML=html;
+    wrap.querySelectorAll("a[href]").forEach(a=>{
+      const href=a.getAttribute("href");
+      if(/^https?:/i.test(href)){a.target="_blank";a.rel="noopener"}
+    });
+    wrap.querySelectorAll("pre > code").forEach(code=>{
+      const cls=code.className||"";
+      const m=cls.match(/language-([\w-]+)/);
+      if(m){code.parentElement.setAttribute("data-lang",m[1])}
+      if(window.hljs){try{hljs.highlightElement(code)}catch(_){}}
+    });
+    rdrBody.classList.remove("loading");
+    rdrBody.innerHTML="";
+    rdrBody.appendChild(wrap);
+    rdrBody.scrollTop=0;
+  }catch(e){
+    rdrBody.classList.remove("loading");
+    rdrBody.innerHTML=`<div class="rdr-err">// failed to load ${url}: ${e.message}</div>`;
   }
-  rdrCtx=null; // reset history
+}
+
+function openReader(url,title){
   rdrx.classList.add("open");
   rdrx.setAttribute("aria-hidden","false");
   document.body.classList.add("modal-open");
+  // local md path
+  if(/\.md(\?|#|$)/i.test(url) && !/^https?:/i.test(url)){
+    openLocalDoc(url);
+    return;
+  }
+  // github url
+  const parsed=parseGhUrl(url);
+  if(!parsed){
+    closeReader();
+    window.open(url,"_blank","noopener");
+    return;
+  }
+  rdrCtx=null;
   loadDoc(parsed);
 }
 function closeReader(){
@@ -1317,7 +1379,7 @@ rdrClose.addEventListener("click",closeReader);
 rdrx.addEventListener("click",e=>{if(e.target===rdrx)closeReader()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&rdrx.classList.contains("open"))closeReader()});
 
-/* Hijack writeup card "read" links to open in modal */
+/* Hijack writeup + blog card "read" links to open in modal */
 function bindReader(){
   document.querySelectorAll("#wlist .rd, #blist .rd").forEach(a=>{
     if(a.dataset.rdrBound)return;
@@ -1325,10 +1387,12 @@ function bindReader(){
     a.addEventListener("click",e=>{
       const href=a.getAttribute("href");
       if(!href||href==="#")return;
-      // for github URLs use modal; non-github keep default behavior
-      if(parseGhUrl(href)){
+      // open in modal: GitHub URLs OR local .md files
+      const isLocal=/\.md(\?|#|$)/i.test(href)&&!/^https?:/i.test(href);
+      const isGh=!!parseGhUrl(href);
+      if(isLocal||isGh){
         e.preventDefault();
-        openReader(href,a.closest("article")?.querySelector("h3")?.textContent||"writeup");
+        openReader(href,a.closest("article")?.querySelector("h3")?.textContent||"post");
       }
     });
   });

@@ -1,5 +1,41 @@
 [
   {
+    "title": "Race condition trên filesystem — không chỉ là memory",
+    "date": "2026-04-27",
+    "tags": [
+      "CONCURRENCY",
+      "LINUX",
+      "SECURITY"
+    ],
+    "type": "blog",
+    "description": "Race condition không chỉ xảy ra giữa thread cùng process. Worker pool web app + filesystem chia sẻ là chỗ race kinh điển — và cách phòng tránh bằng O_TMPFILE, atomic rename, file lock.",
+    "url": "posts/105-filesystem-race-condition.md"
+  },
+  {
+    "title": "LLM dưới góc security — vì sao prompt injection không fix triệt để được",
+    "date": "2026-04-27",
+    "tags": [
+      "LLM",
+      "AI",
+      "SECURITY"
+    ],
+    "type": "blog",
+    "description": "LLM thực ra chỉ là next-token predictor. System prompt với user prompt cùng là tokens — không có boundary thật. Đó là lý do prompt injection là vấn đề kiến trúc, không phải bug để fix.",
+    "url": "posts/106-llm-prompt-injection-internals.md"
+  },
+  {
+    "title": "Git index v4 path compression — bytes ngầm bypass scanner",
+    "date": "2026-04-26",
+    "tags": [
+      "GIT",
+      "INTERNALS",
+      "SECURITY"
+    ],
+    "type": "blog",
+    "description": "Khám phá .git/index — file nội bộ quan trọng nhất của Git — và cơ chế nén path ở version 4 vô tình tạo blind spot cho scanner kiểu grep.",
+    "url": "posts/104-git-index-v4-path-compression.md"
+  },
+  {
     "title": "Write-up B01lers CTF 2026 (Web)",
     "date": "2026-04-26",
     "tags": [
@@ -11,24 +47,16 @@
     "url": "https://github.com/TrangTuanAnh/B01lers-CTF-2026"
   },
   {
-    "title": "Field Notes on Stream Ciphers",
-    "date": "2026-04-05",
+    "title": "NaN — kẻ phá hoại các check số học trong Python",
+    "date": "2026-04-25",
     "tags": [
-      "CRYPTO"
+      "PYTHON",
+      "IEEE754",
+      "SECURITY"
     ],
     "type": "blog",
-    "description": "What changed in my cryptography practice after recent challenge sets.",
-    "url": "posts/102-stream-cipher-notes.md"
-  },
-  {
-    "title": "Designing CTF Challenges That Teach",
-    "date": "2026-03-30",
-    "tags": [
-      "MISC"
-    ],
-    "type": "blog",
-    "description": "Balancing puzzle creativity with real-world exploitation habits.",
-    "url": "posts/101-ctf-design.md"
+    "description": "Tại sao mọi so sánh với NaN đều ra False, NaN nuốt mọi phép toán, và những dòng code tưởng chừng an toàn nhưng nát bét khi gặp NaN.",
+    "url": "posts/103-nan-bypass-python-checks.md"
   },
   {
     "title": "Writeup Tier 2 Hack The Box",

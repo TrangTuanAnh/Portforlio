@@ -1132,16 +1132,18 @@ function parseGhUrl(url){
   }catch(_){return null}
 }
 
-/* Try to fetch a raw URL on main, fallback master */
+/* Try to fetch a raw URL on main, fallback master, fallback common branches */
 async function fetchRaw(owner,repo,branchPath){
-  for(const branch of ["main","master"]){
+  const tried=[];
+  for(const branch of ["main","master","develop","gh-pages"]){
     const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${branchPath}`;
+    tried.push(url);
     try{
       const r=await fetch(url);
       if(r.ok)return {text:await r.text(),branch,url};
     }catch(_){}
   }
-  return null;
+  return {error:true,tried};
 }
 
 /* Resolve a path inside the loaded repo to an absolute raw URL.
@@ -1211,14 +1213,25 @@ async function loadDoc(spec,pushHistory=true){
   rdrTtl.textContent=`${repo}/${path}`;
 
   const fetched=await fetchRaw(owner,repo,path);
-  if(!fetched){
+  if(!fetched || fetched.error){
     // Maybe path is a directory without trailing slash, try /README.md
     if(!path.endsWith(".md")){
       const alt=await fetchRaw(owner,repo,path+"/README.md");
-      if(alt){return finishLoad({owner,repo,path:path+"/README.md",branch:alt.branch},alt.text)}
+      if(alt && !alt.error){return finishLoad({owner,repo,path:path+"/README.md",branch:alt.branch},alt.text)}
     }
+    const triedHtml=(fetched&&fetched.tried||[]).map(u=>`<div style="font-size:.75rem;color:var(--mute);margin:.15rem 0">- ${u}</div>`).join("");
     rdrBody.classList.remove("loading");
-    rdrBody.innerHTML=`<div class="rdr-err">// failed to fetch ${repo}/${path}<br><a href="https://github.com/${owner}/${repo}" target="_blank" rel="noopener">→ open on github</a></div>`;
+    rdrBody.innerHTML=`<div class="rdr-err">
+      // failed to fetch <b>${repo}/${path}</b><br>
+      <div style="margin:.8rem 0;color:var(--mute);font-size:.8rem">đã thử các branch:</div>
+      ${triedHtml}
+      <div style="margin-top:1rem">
+        <a href="https://github.com/${owner}/${repo}" target="_blank" rel="noopener" style="color:var(--cyan);border:1px solid rgba(0,217,255,.3);padding:.4rem .9rem;font-family:var(--mono);font-size:.82rem;text-decoration:none;display:inline-block">→ open repo on github</a>
+      </div>
+      <div style="margin-top:.8rem;color:var(--mute);font-size:.75rem">
+        có thể repo private / không có README / dùng branch khác lạ
+      </div>
+    </div>`;
     return;
   }
   finishLoad({owner,repo,path,branch:fetched.branch},fetched.text);
@@ -1229,6 +1242,9 @@ function finishLoad(ctx,markdown){
   const history=(rdrCtx&&rdrCtx.history)||[];
   rdrCtx={...ctx,history};
   setCrumb(rdrCtx);
+
+  // strip YAML frontmatter (some README có frontmatter cho Jekyll/Hugo)
+  markdown=markdown.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/,"");
 
   // configure marked + highlight.js
   if(window.marked){

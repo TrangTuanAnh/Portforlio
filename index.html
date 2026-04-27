@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
 <style>
 /* ==============================================================
    0xTuanAnh — cyberpunk / hacker terminal portfolio
@@ -503,6 +504,226 @@ a:hover{color:var(--green);text-shadow:0 0 8px rgba(57,255,136,.6)}
   .term-body .ucur,.hero h1 .cur{animation:none}
 }
 
+/* ===== READER MODAL ===== */
+.rdrx{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(5,7,10,.88);
+  backdrop-filter:blur(6px);
+  display:none;
+  align-items:flex-start;justify-content:center;
+  padding:2vh 0;
+  animation:rfade .25s ease-out;
+}
+.rdrx.open{display:flex}
+@keyframes rfade{from{opacity:0}to{opacity:1}}
+
+.rdr{
+  width:min(960px,94vw);
+  max-height:96vh;
+  background:var(--bg);
+  border:1px solid var(--green);
+  box-shadow:0 0 60px rgba(57,255,136,.25),0 24px 80px rgba(0,0,0,.8);
+  display:flex;flex-direction:column;
+  border-radius:6px;
+  overflow:hidden;
+  animation:rslide .3s ease-out;
+}
+@keyframes rslide{from{transform:translateY(20px) scale(.985);opacity:0}to{transform:none;opacity:1}}
+
+.rdr-bar{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.55rem .85rem;
+  background:var(--bg-3);
+  border-bottom:1px solid var(--line-soft);
+  font-family:var(--mono);font-size:.78rem;
+}
+.rdr-bar .dot{width:11px;height:11px;border-radius:50%;cursor:pointer;transition:transform .12s}
+.rdr-bar .dot.r{background:#ff5f56}
+.rdr-bar .dot.r:hover{transform:scale(1.2);box-shadow:0 0 10px #ff5f56}
+.rdr-bar .dot.y{background:#ffbd2e}
+.rdr-bar .dot.g{background:#27c93f}
+.rdr-bar .ttl{
+  margin-left:.6rem;color:var(--ink-2);
+  flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.rdr-bar .ttl .pp{color:var(--green)}
+.rdr-bar .esc{color:var(--mute);font-size:.7rem}
+.rdr-bar .esc kbd{
+  font-family:var(--mono);font-size:.66rem;
+  background:var(--bg-2);border:1px solid var(--line-soft);
+  padding:.05rem .35rem;color:var(--ink-2);border-radius:3px;
+}
+
+.rdr-crumb{
+  padding:.55rem 1.1rem;
+  font-family:var(--mono);font-size:.78rem;
+  color:var(--mute);
+  background:var(--bg-2);
+  border-bottom:1px solid var(--line-soft);
+  display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;
+}
+.rdr-crumb .seg{color:var(--cyan)}
+.rdr-crumb .sep{color:var(--mute);opacity:.5}
+.rdr-crumb .back{
+  margin-left:auto;
+  color:var(--green);
+  background:transparent;border:1px solid var(--line);
+  padding:.2rem .6rem;cursor:pointer;
+  font-family:var(--mono);font-size:.72rem;
+  transition:all .12s;
+}
+.rdr-crumb .back:hover{background:rgba(57,255,136,.1)}
+.rdr-crumb .ext{
+  color:var(--cyan);
+  background:transparent;border:1px solid rgba(0,217,255,.3);
+  padding:.2rem .6rem;
+  font-family:var(--mono);font-size:.72rem;text-decoration:none;
+  transition:all .12s;
+}
+.rdr-crumb .ext:hover{background:rgba(0,217,255,.1)}
+
+.rdr-body{
+  overflow-y:auto;
+  padding:2rem 2.4rem 3rem;
+  font-family:var(--sans);
+  font-size:.94rem;line-height:1.7;
+  color:var(--ink);
+  flex:1;
+  /* terminal scanlines effect inside body */
+  background-image:linear-gradient(rgba(57,255,136,.012) 1px,transparent 1px);
+  background-size:100% 4px;
+}
+.rdr-body.loading{
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);color:var(--green);
+  background:none;
+}
+.rdr-body.loading::before{
+  content:"$ fetching writeup";color:var(--green);
+}
+.rdr-body.loading::after{
+  content:"";display:inline-block;width:.6em;height:1.05em;
+  background:var(--green);margin-left:.4em;vertical-align:-3px;
+  animation:blink 1s steps(1) infinite;
+}
+.rdr-err{
+  font-family:var(--mono);color:var(--red);
+  padding:2rem;text-align:center;
+}
+.rdr-err a{display:inline-block;margin-top:.8rem;color:var(--cyan)}
+
+/* markdown content styling */
+.rdr-body h1,.rdr-body h2,.rdr-body h3,.rdr-body h4,.rdr-body h5,.rdr-body h6{
+  font-family:var(--mono);
+  color:var(--ink);
+  margin:1.5rem 0 .7rem;
+  letter-spacing:-.005em;
+  scroll-margin-top:60px;
+}
+.rdr-body h1{font-size:1.75rem;color:var(--green);border-bottom:1px solid var(--line);padding-bottom:.5rem;margin-top:0}
+.rdr-body h1::before{content:"# ";color:var(--mute)}
+.rdr-body h2{font-size:1.35rem;color:var(--cyan);margin-top:2rem}
+.rdr-body h2::before{content:"## ";color:var(--mute)}
+.rdr-body h3{font-size:1.1rem;color:var(--amber)}
+.rdr-body h3::before{content:"### ";color:var(--mute)}
+.rdr-body h4{font-size:1rem;color:var(--magenta)}
+.rdr-body h4::before{content:"#### ";color:var(--mute)}
+
+.rdr-body p{margin-bottom:.95rem;color:var(--ink-2)}
+.rdr-body strong{color:var(--ink);font-weight:600}
+.rdr-body em{color:var(--amber);font-style:italic}
+.rdr-body a{color:var(--cyan);text-decoration:underline;text-decoration-color:rgba(0,217,255,.35);text-underline-offset:3px}
+.rdr-body a:hover{text-decoration-color:var(--cyan)}
+
+.rdr-body ul,.rdr-body ol{margin:.5rem 0 1rem 1.4rem;color:var(--ink-2)}
+.rdr-body li{margin-bottom:.3rem}
+.rdr-body ul li::marker{color:var(--green)}
+.rdr-body ol li::marker{color:var(--cyan);font-family:var(--mono)}
+
+.rdr-body blockquote{
+  border-left:3px solid var(--amber);
+  padding:.4rem .9rem;
+  background:rgba(255,180,84,.05);
+  margin:.8rem 0 1.1rem;
+  color:var(--ink-2);
+  font-style:italic;
+}
+.rdr-body blockquote p:last-child{margin-bottom:0}
+
+.rdr-body code{
+  font-family:var(--mono);font-size:.86em;
+  background:var(--bg-3);
+  color:var(--green);
+  padding:.12em .42em;
+  border-radius:3px;
+  border:1px solid var(--line-soft);
+}
+.rdr-body pre{
+  background:var(--bg-3) !important;
+  border:1px solid var(--line-soft);
+  border-left:3px solid var(--green);
+  border-radius:5px;
+  padding:1rem 1.1rem !important;
+  margin:.8rem 0 1.2rem;
+  overflow-x:auto;
+  font-size:.84rem;
+  line-height:1.55;
+  position:relative;
+}
+.rdr-body pre code{
+  background:transparent;
+  border:0;
+  padding:0;
+  color:inherit;
+  font-size:inherit;
+}
+.rdr-body pre::before{
+  content:attr(data-lang);
+  position:absolute;top:0;right:0;
+  font-family:var(--mono);font-size:.66rem;
+  color:var(--mute);
+  background:var(--bg-2);
+  padding:.15rem .55rem;
+  border-bottom-left-radius:5px;
+  border-left:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+.rdr-body table{
+  border-collapse:collapse;
+  width:100%;
+  margin:1rem 0 1.2rem;
+  font-size:.86rem;
+  font-family:var(--mono);
+}
+.rdr-body table th,.rdr-body table td{
+  border:1px solid var(--line-soft);
+  padding:.5rem .8rem;
+  text-align:left;
+  vertical-align:top;
+}
+.rdr-body table th{
+  background:var(--bg-3);color:var(--green);
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.rdr-body table tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+
+.rdr-body img{max-width:100%;border:1px solid var(--line-soft);border-radius:4px;margin:.5rem 0}
+.rdr-body hr{border:0;border-top:1px dashed var(--line-soft);margin:2rem 0}
+
+@media (max-width:780px){
+  .rdr{width:100vw;max-height:100vh;border-radius:0}
+  .rdrx{padding:0}
+  .rdr-body{padding:1.5rem 1.2rem 3rem;font-size:.9rem}
+  .rdr-body h1{font-size:1.4rem}
+  .rdr-body h2{font-size:1.15rem}
+  .rdr-body pre{font-size:.78rem}
+  .rdr-bar .esc{display:none}
+}
+body.modal-open{overflow:hidden}
+
 </style>
 </head>
 <body>
@@ -750,10 +971,30 @@ a:hover{color:var(--green);text-shadow:0 0 8px rgba(57,255,136,.6)}
 
 </main>
 
+<!-- ============== READER MODAL ============== -->
+<div class="rdrx" id="rdrx" role="dialog" aria-modal="true" aria-hidden="true">
+  <article class="rdr">
+    <header class="rdr-bar">
+      <span class="dot r" id="rdrClose" title="close (esc)"></span>
+      <span class="dot y"></span>
+      <span class="dot g"></span>
+      <span class="ttl"><span class="pp">~/writeups/</span><span id="rdrTtl">loading...</span></span>
+      <span class="esc"><kbd>ESC</kbd> close</span>
+    </header>
+    <div class="rdr-crumb" id="rdrCrumb">
+      <span class="seg">README.md</span>
+      <a class="ext" id="rdrExt" target="_blank" rel="noopener">view on github ↗</a>
+    </div>
+    <div class="rdr-body loading" id="rdrBody"></div>
+  </article>
+</div>
+
 <footer class="ft">
   <span class="blk">$</span> echo "© 2026 · 0xTuanAnh · UIT Information Security · still typing..."
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
 /* ============== FALLBACK POSTS ============== */
 const fallback=[
@@ -858,6 +1099,243 @@ function tabsNav(){
     });
   });
 }
+
+/* ============== READER MODAL ============== */
+const rdrx=document.getElementById("rdrx");
+const rdrBody=document.getElementById("rdrBody");
+const rdrTtl=document.getElementById("rdrTtl");
+const rdrCrumb=document.getElementById("rdrCrumb");
+const rdrExt=document.getElementById("rdrExt");
+const rdrClose=document.getElementById("rdrClose");
+let rdrCtx=null; // {owner, repo, branch, path, title, history:[]}
+
+/* parse https://github.com/USER/REPO[/...] -> {owner, repo, restPath} */
+function parseGhUrl(url){
+  try{
+    const u=new URL(url);
+    if(u.hostname!=="github.com")return null;
+    const parts=u.pathname.replace(/^\/+/,"").replace(/\/+$/,"").split("/");
+    if(parts.length<2)return null;
+    const owner=parts[0],repo=parts[1];
+    let path="";
+    if(parts.length>=4 && (parts[2]==="blob"||parts[2]==="tree")){
+      // /USER/REPO/blob/BRANCH/PATH
+      path=parts.slice(4).join("/");
+    } else if(parts.length>2){
+      path=parts.slice(2).join("/");
+    }
+    return {owner,repo,path};
+  }catch(_){return null}
+}
+
+/* Try to fetch a raw URL on main, fallback master */
+async function fetchRaw(owner,repo,branchPath){
+  for(const branch of ["main","master"]){
+    const url=`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${branchPath}`;
+    try{
+      const r=await fetch(url);
+      if(r.ok)return {text:await r.text(),branch,url};
+    }catch(_){}
+  }
+  return null;
+}
+
+/* Resolve a path inside the loaded repo to an absolute raw URL.
+   Used for rewriting <img src="screenshots/..."> etc. */
+function resolveAsset(ctx,relPath){
+  // strip ./
+  relPath=relPath.replace(/^\.\//,"");
+  // join with current doc dir
+  const docDir=ctx.path.includes("/")?ctx.path.replace(/\/[^\/]*$/,""):"";
+  const joined=docDir?docDir+"/"+relPath:relPath;
+  // normalize ../ segments
+  const segs=[];
+  for(const s of joined.split("/")){
+    if(s===".."){segs.pop()}else if(s&&s!=="."){segs.push(s)}
+  }
+  return `https://raw.githubusercontent.com/${ctx.owner}/${ctx.repo}/${ctx.branch}/${segs.join("/")}`;
+}
+
+/* Returns true if href looks like an internal markdown navigation */
+function isInternalMd(href){
+  if(!href)return false;
+  if(/^https?:|^mailto:|^#/i.test(href))return false;
+  return /\.md(#|\?|$)/i.test(href) || /\/$/.test(href) || !/\./.test(href.split("#")[0].split("/").pop());
+}
+
+function setCrumb(ctx){
+  const segs=ctx.path.split("/").filter(Boolean);
+  rdrCrumb.innerHTML="";
+  const repo=document.createElement("span");repo.className="seg";repo.textContent=ctx.repo;
+  rdrCrumb.appendChild(repo);
+  segs.forEach(s=>{
+    const sep=document.createElement("span");sep.className="sep";sep.textContent=" / ";
+    const seg=document.createElement("span");seg.className="seg";seg.textContent=s;
+    rdrCrumb.append(sep,seg);
+  });
+  // back button if history
+  if(rdrCtx && rdrCtx.history && rdrCtx.history.length){
+    const back=document.createElement("button");
+    back.className="back";back.type="button";back.textContent="← back";
+    back.addEventListener("click",()=>{
+      const prev=rdrCtx.history.pop();
+      if(prev){loadDoc(prev,false)}
+    });
+    rdrCrumb.appendChild(back);
+  }
+  // external link
+  const ext=document.createElement("a");
+  ext.className="ext";ext.target="_blank";ext.rel="noopener";
+  ext.href=`https://github.com/${ctx.owner}/${ctx.repo}/blob/${ctx.branch}/${ctx.path}`;
+  ext.textContent="view on github ↗";
+  rdrCrumb.appendChild(ext);
+}
+
+async function loadDoc(spec,pushHistory=true){
+  // spec: {owner,repo,path} or null path -> README.md at root
+  const owner=spec.owner,repo=spec.repo;
+  let path=spec.path||"";
+  // normalize: empty/dir -> README.md
+  if(!path || path.endsWith("/")){
+    path=(path||"")+"README.md";
+  }
+  if(rdrCtx && pushHistory){
+    rdrCtx.history.push({owner:rdrCtx.owner,repo:rdrCtx.repo,path:rdrCtx.path});
+  }
+  rdrBody.classList.add("loading");
+  rdrBody.innerHTML="";
+  rdrTtl.textContent=`${repo}/${path}`;
+
+  const fetched=await fetchRaw(owner,repo,path);
+  if(!fetched){
+    // Maybe path is a directory without trailing slash, try /README.md
+    if(!path.endsWith(".md")){
+      const alt=await fetchRaw(owner,repo,path+"/README.md");
+      if(alt){return finishLoad({owner,repo,path:path+"/README.md",branch:alt.branch},alt.text)}
+    }
+    rdrBody.classList.remove("loading");
+    rdrBody.innerHTML=`<div class="rdr-err">// failed to fetch ${repo}/${path}<br><a href="https://github.com/${owner}/${repo}" target="_blank" rel="noopener">→ open on github</a></div>`;
+    return;
+  }
+  finishLoad({owner,repo,path,branch:fetched.branch},fetched.text);
+}
+
+function finishLoad(ctx,markdown){
+  // preserve history if we already had one
+  const history=(rdrCtx&&rdrCtx.history)||[];
+  rdrCtx={...ctx,history};
+  setCrumb(rdrCtx);
+
+  // configure marked + highlight.js
+  if(window.marked){
+    marked.setOptions({
+      breaks:false,gfm:true,
+      highlight:(code,lang)=>{
+        if(window.hljs){
+          try{return lang&&hljs.getLanguage(lang)?hljs.highlight(code,{language:lang}).value:hljs.highlightAuto(code).value}
+          catch(_){return code}
+        }
+        return code;
+      }
+    });
+  }
+  const html=window.marked?marked.parse(markdown):markdown.replace(/</g,"&lt;");
+  const wrap=document.createElement("div");
+  wrap.innerHTML=html;
+
+  // rewrite image src + a href relative paths
+  wrap.querySelectorAll("img[src]").forEach(img=>{
+    const src=img.getAttribute("src");
+    if(!/^https?:|^data:/i.test(src)){
+      img.src=resolveAsset(rdrCtx,src);
+      img.loading="lazy";
+    }
+  });
+  wrap.querySelectorAll("a[href]").forEach(a=>{
+    const href=a.getAttribute("href");
+    if(!href||href.startsWith("#")){return}
+    if(/^https?:/i.test(href)){
+      a.target="_blank";a.rel="noopener";
+      return;
+    }
+    if(/^mailto:/i.test(href)){return}
+    // relative link inside repo
+    if(isInternalMd(href)){
+      a.addEventListener("click",e=>{
+        e.preventDefault();
+        // resolve target path relative to current doc
+        const docDir=rdrCtx.path.includes("/")?rdrCtx.path.replace(/\/[^\/]*$/,""):"";
+        let target=href.split("#")[0].replace(/^\.\//,"");
+        const joined=docDir?docDir+"/"+target:target;
+        const segs=[];
+        for(const s of joined.split("/")){
+          if(s===".."){segs.pop()}else if(s&&s!=="."){segs.push(s)}
+        }
+        loadDoc({owner:rdrCtx.owner,repo:rdrCtx.repo,path:segs.join("/")});
+      });
+    } else {
+      // non-md asset: open on github raw in new tab
+      a.href=resolveAsset(rdrCtx,href);
+      a.target="_blank";a.rel="noopener";
+    }
+  });
+
+  // attach lang attr to <pre> from inner code class for the corner badge
+  wrap.querySelectorAll("pre > code").forEach(code=>{
+    const cls=code.className||"";
+    const m=cls.match(/language-([\w-]+)/);
+    if(m){code.parentElement.setAttribute("data-lang",m[1])}
+    if(window.hljs){try{hljs.highlightElement(code)}catch(_){}}
+  });
+
+  rdrBody.classList.remove("loading");
+  rdrBody.innerHTML="";
+  rdrBody.appendChild(wrap);
+  rdrBody.scrollTop=0;
+}
+
+function openReader(url,title){
+  const parsed=parseGhUrl(url);
+  if(!parsed){
+    // fallback: just open in new tab
+    window.open(url,"_blank","noopener");
+    return;
+  }
+  rdrCtx=null; // reset history
+  rdrx.classList.add("open");
+  rdrx.setAttribute("aria-hidden","false");
+  document.body.classList.add("modal-open");
+  loadDoc(parsed);
+}
+function closeReader(){
+  rdrx.classList.remove("open");
+  rdrx.setAttribute("aria-hidden","true");
+  document.body.classList.remove("modal-open");
+  rdrCtx=null;
+}
+rdrClose.addEventListener("click",closeReader);
+rdrx.addEventListener("click",e=>{if(e.target===rdrx)closeReader()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&rdrx.classList.contains("open"))closeReader()});
+
+/* Hijack writeup card "read" links to open in modal */
+function bindReader(){
+  document.querySelectorAll("#wlist .rd, #blist .rd").forEach(a=>{
+    if(a.dataset.rdrBound)return;
+    a.dataset.rdrBound="1";
+    a.addEventListener("click",e=>{
+      const href=a.getAttribute("href");
+      if(!href||href==="#")return;
+      // for github URLs use modal; non-github keep default behavior
+      if(parseGhUrl(href)){
+        e.preventDefault();
+        openReader(href,a.closest("article")?.querySelector("h3")?.textContent||"writeup");
+      }
+    });
+  });
+}
+/* Patch render() to call bindReader after rendering */
+const _origRender=render;
+render=function(ps){_origRender(ps);bindReader();};
 
 /* ============== INIT ============== */
 window.addEventListener("DOMContentLoaded",()=>{

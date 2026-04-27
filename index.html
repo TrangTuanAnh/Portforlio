@@ -680,10 +680,11 @@ body::before{
         <p class="tl"><span class="prompt">mage@tower:~$</span> <span id="l3"></span><span class="cur">▍</span></p>
       </div>
 
-      <p class="hd">Honors student in Information Security at UIT — GPA <strong style="color:var(--gold)">8.92</strong>. By day I temper wards and craft intrusion-detection sigils; by night I unbind the seals of broken web apps. Ranked Top 15% globally on TryHackMe.</p>
+      <p class="hd">Honors student in Information Security at UIT — GPA <strong style="color:var(--gold)">8.92</strong>. By day I temper wards and craft intrusion-detection sigils; by night I unbind the seals of broken web apps. Ranked <strong style="color:var(--gold)">Top 11</strong> at B01lers CTF 2026 with team UIT-creampie, and Top 15% globally on TryHackMe.</p>
 
       <div class="hs">
         <div class="hi tilt"><strong class="hv">8.92</strong><span class="hl">GPA / 10</span></div>
+        <div class="hi tilt"><strong class="hv">Top 11</strong><span class="hl">B01lers CTF 2026</span></div>
         <div class="hi tilt"><strong class="hv">Top 15%</strong><span class="hl">TryHackMe</span></div>
         <div class="hi tilt"><strong class="hv">20+</strong><span class="hl">PortSwigger Labs</span></div>
         <div class="hi tilt"><strong class="hv">46</strong><span class="hl">THM Rooms</span></div>
@@ -724,6 +725,14 @@ body::before{
 <section id="certs" class="sec container">
   <h2 class="st rv">The Grimoire — Seals &amp; Certifications</h2>
   <div class="cg">
+    <article class="cc rv tilt">
+      <div class="ci">🏆</div>
+      <h3 class="cn">B01lers CTF 2026 — Top 11</h3>
+      <p class="iss">Purdue B01lers · Open Division</p>
+      <p class="det">Team UIT-creampie · 7825 pts · 11/all teams · Strong: web &amp; rev</p>
+      <p class="dt">April 2026</p>
+      <a class="cl" href="https://github.com/TrangTuanAnh/B01lers-CTF-2026">Open Writeup →</a>
+    </article>
     <article class="cc rv tilt">
       <div class="ci">🔐</div>
       <h3 class="cn">TryHackMe — Jr Penetration Tester</h3>
@@ -1133,4 +1142,16 @@ function heroParallax(){
   hero.addEventListener("mouseleave",()=>{
     card.style.setProperty("--rx","0deg");
     card.style.setProperty("--ry","0deg");
-    i
+    if(circle) circle.style.transform="";
+  });
+}
+
+/* ============== INIT ============== */
+document.addEventListener("DOMContentLoaded",()=>{
+  obs(document);hero();tabsNav();loadPosts();
+  cursor();petals();bindTilt();heroParallax();
+});
+window.addEventListener("load",()=>{starfield()});
+</script>
+</body>
+</html>

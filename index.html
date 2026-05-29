@@ -788,7 +788,7 @@ body.modal-open{overflow:hidden}
   <div class="about-grid">
     <div class="bio rv">
       <p>Sinh viên năm 2 ngành <strong class="hl">An toàn thông tin (Cử nhân Tài năng)</strong> tại UIT-VNU HCM. Đang tập trung vào web app security, network pentesting và nghiên cứu DNS cache poisoning.</p>
-      <p>Ban ngày làm intrusion-detection, ban đêm bẻ khoá web app trong CTF. Mục tiêu gần — <strong class="hl b">Red Team Internship</strong>.</p>
+      <p>Ban ngày làm intrusion-detection, ban đêm bẻ khoá web app trong CTF. Thích kiểu bài phải đọc log, dựng timeline và chứng minh bằng evidence.</p>
       <p>Recent highlight: <strong class="hl">Top 11 thế giới</strong> tại B01lers CTF 2026 (Open division) cùng team UIT-creampie.</p>
     </div>
 
@@ -924,6 +924,23 @@ body.modal-open{overflow:hidden}
       </div>
       <p class="plinkrow"><a class="cl" href="https://www.usenix.org/conference/usenixsecurity25/presentation/afek">reference paper</a></p>
     </article>
+
+    <article class="pc rv">
+      <div class="ph">
+        <h3 class="pti">Bailiwick Breakout 2: Trust Boundary</h3>
+        <p class="pmeta">solo · 2026</p>
+      </div>
+      <ul class="pbl">
+        <li>Forensic CTF lab on DNS cache poisoning via CVE-2021-43105 / bailiwick trust boundary</li>
+        <li>Designed incident-style artifacts: pcap, cache snapshots, resolver logs and known-good zones</li>
+        <li>Built Flask checker + generator/solver pipeline for reproducible challenge validation</li>
+      </ul>
+      <div class="pstack">
+        <span class="tag b">python</span><span class="tag">flask</span><span class="tag">docker</span>
+        <span class="tag m">dns</span><span class="tag r">forensics</span><span class="tag a">ctf</span>
+      </div>
+      <p class="plinkrow"><a class="cl" href="https://github.com/TrangTuanAnh/pops-dns-cache-poisoning-ctf">github.com/TrangTuanAnh/pops-dns-cache-poisoning-ctf</a></p>
+    </article>
   </div>
 </section>
 
@@ -945,10 +962,6 @@ body.modal-open{overflow:hidden}
   <h2 class="st rv">contact <span class="num">// 05</span></h2>
   <p class="sub rv">curl -X POST /summon</p>
 
-  <p class="rv" style="color:var(--ink-2);font-size:.95rem;max-width:680px">
-    Đang tìm cơ hội <strong style="color:var(--green)">Red Team Internship</strong> hoặc cộng tác nghiên cứu bảo mật. Ping qua kênh nào cũng được — em sẽ trả lời trong 24h.
-  </p>
-
   <div class="contact-grid rv">
     <div class="row">
       <span class="k">email · uit</span>
@@ -957,6 +970,10 @@ body.modal-open{overflow:hidden}
     <div class="row">
       <span class="k">email · personal</span>
       <a class="v" href="mailto:trangtuananh11102006mc@gmail.com">trangtuananh11102006mc@gmail.com</a>
+    </div>
+    <div class="row">
+      <span class="k">discord</span>
+      <span class="v">horiz_06</span>
     </div>
     <div class="row">
       <span class="k">github</span>
@@ -1023,7 +1040,7 @@ async function hero(){
     "Information Security Student @ UIT",
     "Web Application Pentester",
     "CTF Player — B01lers / PicoCTF / HTB",
-    "Red Team Intern Candidate",
+    "DNS & Web Security Research",
     "0xTuanAnh"
   ];
   await type(l1," whoami");

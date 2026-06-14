@@ -1,5 +1,18 @@
 [
   {
+    "title": "Write-up TryHackMe",
+    "date": "2026-06-14",
+    "tags": [
+      "WEB",
+      "CRYPTO",
+      "CTF",
+      "THM"
+    ],
+    "type": "writeup",
+    "description": "Write-up các challenge TryHackMe — chủ yếu web và crypto. Các bài bao gồm JS deobfuscation, CBC bit-flip, PHP MT19937, DES key recovery và nhiều kỹ thuật khác.",
+    "url": "https://github.com/TrangTuanAnh/Tryhackme_ctf"
+  },
+  {
     "title": "Race condition trên filesystem",
     "date": "2026-04-27",
     "tags": [

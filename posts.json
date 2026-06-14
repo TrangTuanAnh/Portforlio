@@ -9,7 +9,7 @@
       "THM"
     ],
     "type": "writeup",
-    "description": "Write-up các challenge TryHackMe — chủ yếu web và crypto. Các bài bao gồm JS deobfuscation, CBC bit-flip, PHP MT19937, DES key recovery và nhiều kỹ thuật khác.",
+    "description": "Write-up các challenge TryHackMe — chủ yếu web và crypto. Bao gồm: SQL injection, JS deobfuscation, CBC bit-flip, PHP MT19937, DES key recovery, OTP rate-limit bypass (X-Forwarded-For), JWT kid injection, password attacks (CUPP, SHA256 preimage, SSH rule-based).",
     "url": "https://github.com/TrangTuanAnh/Tryhackme_ctf"
   },
   {
